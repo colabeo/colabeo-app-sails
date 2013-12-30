@@ -28,13 +28,61 @@ module.exports = {
    */
   _config: {},
 
-  signUp : function() {
+  registrationForm : function(req, res, next) {
+    var message = req.flash('error');
+    return res.view({ message : message });
+  },
+
+  loginForm : function(req, res, next) {
+    var message = req.flash('error');
+    console.log('login for message', message);
+    return res.view({ message : message });
+  },
+
+  forgetPasswordForm : function(req, res, next) {
+    return res.view();
+  },
+
+  signUp : function(req, res, next) {
+
+    var user = new Parse.User();
+    user.set("lastname", req.param('lastname'));
+    user.set("firstname", req.param('firstname'));
+    user.set("username", req.param('email'));
+    user.set("password", req.param('password'));
+    user.set("email", req.param('email'));
+
+    user.signUp(null, {
+      success: function(user) {
+        console.log("Sign up - success");
+        res.redirect('/');
+      },
+      error: function(user, error) {
+        // Show the error message somewhere and let the user try again.
+        // alert("Error: " + error.code + " " + error.message);
+        req.flash('error', error.message);
+        res.redirect('/register');
+      }
+    });
 
   },
 
-  login : function(req, res, next) {
+  forgetPassword : function(req, res, next) {
+    console.log("forget Password calling " + req.param('email'));
 
-    console.log("called.");
+    Parse.User.requestPasswordReset(req.param("email"), {
+      success: function() {
+        // Password reset request was sent successfully
+        res.redirect('/');
+      },
+      error: function(error) {
+        // Show the error message somewhere
+        // alert("Error: " + error.code + " " + error.message);
+      }
+    });
+  },
+
+  login : function(req, res, next) {
 
     passport.authenticate('local', {
 //            successRedirect: '/',
@@ -47,7 +95,9 @@ module.exports = {
       console.log("err ", err);
       console.log("info ", info);
 
-      if (err) { return next(err); }
+      req.flash('error', info);
+
+        if (err) { return next(err); }
       if (!user) { return res.redirect('/login'); }
 
       req.logIn(user, function(err) {

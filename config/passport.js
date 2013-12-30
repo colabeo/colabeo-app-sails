@@ -1,7 +1,8 @@
 var passport    = require('passport'),
     LocalStrategy = require('passport-local').Strategy,
     Parse = require('parse').Parse,
-    bcrypt = require('bcrypt');
+    bcrypt = require('bcrypt'),
+    flash = require('connect-flash');
 
 // setup req.session.passport.user
 passport.serializeUser(function (user, done) {
@@ -59,6 +60,7 @@ module.exports = {
 
       app.use(passport.initialize());
       app.use(passport.session());
+      app.use(flash());
     }
 
   }

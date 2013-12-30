@@ -30,6 +30,12 @@
 <br />
 <div class="container eternity-form">
     <div class="login-form-section">
+        <% if ((message) && (message != "")) { %>
+        <div class="login-form-links link2 animated bounceIn" style="">
+            <span><%=message%></span>
+        </div>
+        <% } %>
+
         <div class="login-content animated bounceIn">
             <form method="POST" action="/login">
                 <div class="section-title">
@@ -38,7 +44,7 @@
                 <div class="textbox-wrap">
                     <div class="input-group">
                         <span class="input-group-addon "><i class="icon-user icon-color"></i></span>
-                        <input name="username" type="text" required="required" class="form-control" placeholder="Username" />
+                        <input name="username" type="text" required="required" class="form-control" placeholder="Email Address" />
                     </div>
                 </div>
                 <div class="textbox-wrap">
@@ -50,7 +56,7 @@
                 <div class="login-form-action clearfix">
                     <div class="checkbox pull-left">
                         <div class="custom-checkbox">
-                            <input type="checkbox" name="RememberMe">
+                            <input class="iCheck" type="checkbox" name="RememberMe">
                         </div>
                         <span class="checkbox-text pull-left">&nbsp;Remember Me</span>
                     </div>
@@ -67,12 +73,11 @@
         <div class="login-form-links link2 animated fadeInRightBig">
             <h4 class="green">Forget your Password?</h4>
             <span>Dont worry</span>
-            <a href="#" class="green">Click Here</a>
+            <a href="forgetpassword" class="green">Click Here</a>
             <span>to Get New One</span>
         </div>
     </div>
 </div>
-
 <br />
 <br />
 <br />

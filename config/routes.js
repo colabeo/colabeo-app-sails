@@ -42,11 +42,16 @@ module.exports.routes = {
   // But what if you want your home page to display
   // a signup form located at `views/user/signup.ejs`?
   '/': {
-    view: 'user/login_form'
+    controller: 'home',
+    action: 'index'
   },
 
   // If you want to set up a route only for a particular HTTP method/verb
   // (GET, POST, PUT, DELETE) you can specify the verb before the path:
+  'get /login': {
+    view: 'user/login_form'
+  },
+
   'post /signup': {
     controller: 'user',
     action: 'signUp'

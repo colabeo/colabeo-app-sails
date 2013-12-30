@@ -34,6 +34,8 @@ module.exports = {
 
   login : function(req, res, next) {
 
+    console.log("called.");
+
     passport.authenticate('local', {
 //            successRedirect: '/',
 //            failureRedirect: this.urlFor({ action: 'login' }),
@@ -41,7 +43,7 @@ module.exports = {
       }, function(err, user, info) {
       console.log("after login ", user);
       console.log("req.isAuthenticated() ", req.isAuthenticated());
-      console.log("next ", next);
+//      console.log("next ", next);
       console.log("err ", err);
       console.log("info ", info);
 
@@ -50,6 +52,8 @@ module.exports = {
 
       req.logIn(user, function(err) {
         if (err) { return next(err); }
+        console.log("user ", user);
+        console.log("RememberMe ", req.body.RememberMe);
         if ((user) && (req.body.RememberMe)) {
           res.cookie('_sessionToken', user._sessionToken, {expires: new Date(Date.now() + COOKIE_LIFECYCLE), httpOnly: true});
         }

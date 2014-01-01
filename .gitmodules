@@ -1,3 +1,4 @@
+
 [submodule "assets/famous-time"]
 	path = assets/famous-time
-	url = git@github.com:FamousPrivateBeta/famous-time-by-colabeo.git
+	url = git@github.com:colabeo/colabeo-client.git

@@ -67,6 +67,10 @@ module.exports = {
 
   },
 
+  signUpWithFacebook : function(req, res, next) {
+
+  },
+
   forgetPassword : function(req, res, next) {
     console.log("forget Password calling " + req.param('email'));
 

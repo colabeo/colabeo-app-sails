@@ -77,8 +77,8 @@ passport.use(new FacebookStrategy({
       }
     };
 
-    //TODO: use generated GUID as the password
     var user = new Parse.User();
+    //TODO: use generated GUID (or we should use crypt username - in order to login) as the password
     var password = "abcd1234";
     var username = profile.provider + ":" + profile._json.id;
     user.set("lastname", profile._json.last_name);
@@ -87,6 +87,7 @@ passport.use(new FacebookStrategy({
     user.set("password", password);
     user.set("authData", authData);
 
+    //TODO: add login only logic, if the user is already registered
     user.signUp(null, {
       success: function(savedUser) {
         console.log("Sign up with facebook - success");

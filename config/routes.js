@@ -49,6 +49,16 @@ module.exports.routes = {
   // If you want to set up a route only for a particular HTTP method/verb
   // (GET, POST, PUT, DELETE) you can specify the verb before the path:
 
+  'get /me': {
+    controller: 'user',
+    action: 'me'
+  },
+
+  'get /finduser': {
+    controller: 'user',
+    action: 'findUserByExternalAccount'
+  },
+  
   'get /register': {
     controller: 'user',
     action: 'registrationForm'
@@ -65,37 +75,27 @@ module.exports.routes = {
   },
 
   'post /signup': {
-    controller: 'user',
+    controller: 'auth',
     action: 'signUp'
   },
 
   'post /forgetpassword' : {
-    controller: 'user',
+    controller: 'auth',
     action: 'forgetPassword'
   },
 
   'post /login': {
-    controller: 'user',
+    controller: 'auth',
     action: 'login'
   },
 
-  'get /me': {
-    controller: 'user',
-    action: 'me'
-  },
-
-  'get /finduser': {
-    controller: 'user',
-    action: 'findUserByExternalAccount'
-  },
-
   'get /auth/:provider' : {
-    controller: 'user',
+    controller: 'auth',
     action: 'loginWith'
   },
 
   'get /auth/:provider/callback': {
-    controller: 'user',
+    controller: 'auth',
     action: 'loginWithCallback'
   }
 

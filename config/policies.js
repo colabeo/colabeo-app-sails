@@ -19,6 +19,12 @@ module.exports.policies = {
   '*': 'isAuthenticated',
 
   UserController: {
+    '*'                       : true,
+    me                        : 'isAuthenticated',
+    findUserByExternalAccount : 'isAuthenticated'
+  },
+
+  AuthController: {
     '*' : true
   }
 

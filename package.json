@@ -2,7 +2,7 @@
   "name": "colabeo-app-sails",
   "private": true,
   "version": "0.0.1",
-  "description": "a Sails application",
+  "description": "a Colabeo application",
   "dependencies": {
     "sails": "0.9.7",
     "grunt": "0.4.1",
@@ -11,6 +11,7 @@
     "optimist": "0.3.4",
     "passport": "~0.1.17",
     "passport-local": "~0.1.6",
+    "passport-facebook": "~1.0.2",
     "bcrypt": "~0.7.7",
     "parse": "~1.2.13",
     "sendgrid": "~0.4.6",

@@ -1,5 +1,6 @@
 var passport    = require('passport'),
     LocalStrategy = require('passport-local').Strategy,
+    FacebookStrategy = require('passport-facebook').Strategy,
     Parse = require('parse').Parse,
     bcrypt = require('bcrypt'),
     flash = require('connect-flash');
@@ -47,6 +48,55 @@ passport.use(new LocalStrategy({
       }
 
     });
+  }
+));
+
+var FACEBOOK_APP_ID = '1428317197384013';
+var FACEBOOK_APP_SECRET = 'd03fd6db99a7b1c5dd0d82b6d61126ca';
+var HOST_SERVER_URL = 'localhost:1337';
+
+passport.use(new FacebookStrategy({
+    clientID: FACEBOOK_APP_ID,
+    clientSecret: FACEBOOK_APP_SECRET,
+    callbackURL: HOST_SERVER_URL + "/auth/facebook/callback",
+    passReqToCallback: true
+  },
+  function (req, facebookAccessToken, refreshToken, profile, done) {
+    console.log('@FacebookStrategy - After login, AccessToken=' + facebookAccessToken);
+    delete profile._raw;
+    delete profile._json;
+    profile.token=facebookAccessToken;
+
+    var account_current=req.session.passport.user;
+    if (!account_current)
+      account_current={};
+    account_current.facebook = profile  // Add profile to session
+
+    var user_current=userPool[account_current.uid];
+    if (user_current && account_current.uid)   // User exists, client has already login with at least one social network,
+    {
+      user_current.addSocialNetwork(profile); // Add Social Network profile & connector to User instance.
+      user_current._updateFireBaseIndex(profile.provider, profile.id);
+      account_current.uid = user_current.uid;
+      console.log('@FacebookStrategy - Add facebook profile to User.');
+      console.log(user_current);
+      done(null, account_current);
+    }
+    else
+    {
+      User.findOrCreate(profile.id, 'facebook', serverRootRef, facebookAccessToken, profile, function (userInstance) {
+        user_current = userInstance;
+        account_current.uid = user_current.uid;
+        // Just in case client close browser and re-open(without Remember Me checked), then cleaning up, delete the previous user.
+        var user_previous = userPool[account_current.uid];
+        if (user_previous)
+          delete user_previous;
+        userPool[account_current.uid] = user_current;
+        console.log('@FacebookStrategy - Create User with facebook profile.');
+//                console.log(user_current);
+        done(null, account_current);
+      });
+    }
   }
 ));
 

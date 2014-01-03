@@ -82,6 +82,11 @@ module.exports.routes = {
   'get /me': {
     controller: 'user',
     action: 'me'
+  },
+
+  'get /finduser': {
+    controller: 'user',
+    action: 'findUserByExternalAccount'
   }
 
   /*

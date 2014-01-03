@@ -130,5 +130,25 @@ module.exports = {
       return res.json({ error : "User is not authenticated." })
     }
 
+  },
+
+  findUserByExternalAccount : function(req, res, next) {
+    var provider = req.param('provider');
+    var externalId = req.param('externalId');
+    console.log("External Account: ", provider, externalId);
+    var query = new Parse.Query(Parse.User);
+
+    if ((!provider) || (provider === 'email')) {
+      query.equalTo("email", externalId);
+      query.find({
+        success: function(users) {
+          console.log("user - " + JSON.stringify(users[0]));
+          return res.json({ callee :  users[0] });
+        }
+      });
+    }
+    else {
+      // TODO: add other provider search here
+    }
   }
 };

@@ -51,9 +51,10 @@ passport.use(new LocalStrategy({
   }
 ));
 
+// TODO: Put these into the config file
 var FACEBOOK_APP_ID = '1428317197384013';
 var FACEBOOK_APP_SECRET = 'd03fd6db99a7b1c5dd0d82b6d61126ca';
-var HOST_SERVER_URL = 'localhost:1337';
+var HOST_SERVER_URL = 'http://localhost:1337';
 
 passport.use(new FacebookStrategy({
     clientID: FACEBOOK_APP_ID,
@@ -63,40 +64,55 @@ passport.use(new FacebookStrategy({
   },
   function (req, facebookAccessToken, refreshToken, profile, done) {
     console.log('@FacebookStrategy - After login, AccessToken=' + facebookAccessToken);
-    delete profile._raw;
-    delete profile._json;
-    profile.token=facebookAccessToken;
+    console.log('@FacebookStrategy - After login, refreshToken=' + refreshToken);
+    console.log('provider - ', profile._raw);
+    var provider = profile._raw;
 
-    var account_current=req.session.passport.user;
-    if (!account_current)
-      account_current={};
-    account_current.facebook = profile  // Add profile to session
+    //TODO: change the expiration date
+    var authData = {
+      "facebook": {
+        "id": provider.id,
+        "access_token": facebookAccessToken,
+        "expiration_date": "2014-02-01T10:10:00.000Z"
+      }
+    };
 
-    var user_current=userPool[account_current.uid];
-    if (user_current && account_current.uid)   // User exists, client has already login with at least one social network,
-    {
-      user_current.addSocialNetwork(profile); // Add Social Network profile & connector to User instance.
-      user_current._updateFireBaseIndex(profile.provider, profile.id);
-      account_current.uid = user_current.uid;
-      console.log('@FacebookStrategy - Add facebook profile to User.');
-      console.log(user_current);
-      done(null, account_current);
-    }
-    else
-    {
-      User.findOrCreate(profile.id, 'facebook', serverRootRef, facebookAccessToken, profile, function (userInstance) {
-        user_current = userInstance;
-        account_current.uid = user_current.uid;
-        // Just in case client close browser and re-open(without Remember Me checked), then cleaning up, delete the previous user.
-        var user_previous = userPool[account_current.uid];
-        if (user_previous)
-          delete user_previous;
-        userPool[account_current.uid] = user_current;
-        console.log('@FacebookStrategy - Create User with facebook profile.');
-//                console.log(user_current);
-        done(null, account_current);
-      });
-    }
+    //TODO: use generated GUID as the password
+    var user = new Parse.User();
+    var password = "abcd1234";
+    var username = profile.provider + ":" + profile._json.id;
+    user.set("lastname", profile._json.last_name);
+    user.set("firstname", profile._json.first_name);
+    user.set("username", username);
+    user.set("password", password);
+    user.set("authData", authData);
+
+    user.signUp(null, {
+      success: function(savedUser) {
+        console.log("Sign up with facebook - success");
+        console.log("User  - ", username, password);
+        Parse.User.logIn(username, password, {
+
+          success: function (loggedInUser) {
+            console.log("Logged In with sign up with facebook - success")
+            return done(null, loggedInUser);
+          },
+
+          error: function (errorUser, error) {
+            console.log("login after sign up with facebook - error" + JSON.stringify(error));
+            return done(null, false, error.message);
+          }
+
+        });
+      },
+      error: function(errorUser, error) {
+        // Show the error message somewhere and let the user try again.
+        // alert("Error: " + error.code + " " + error.message);
+        console.log("Sign up with facebook - error", error.message);
+        req.flash('error', error.message);
+        done(null, false, error.message);
+      }
+    });
   }
 ));
 

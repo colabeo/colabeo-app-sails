@@ -87,6 +87,16 @@ module.exports.routes = {
   'get /finduser': {
     controller: 'user',
     action: 'findUserByExternalAccount'
+  },
+
+  'get /auth/:provider' : {
+    controller: 'user',
+    action: 'loginWith'
+  },
+
+  'get /auth/:provider/callback': {
+    controller: 'user',
+    action: 'loginWithCallback'
   }
 
   /*

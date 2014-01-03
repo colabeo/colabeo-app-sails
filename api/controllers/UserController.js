@@ -115,6 +115,20 @@ module.exports = {
       })
     }
     )(req, res, next);
-  }
+  },
 
+  me : function(req, res, next) {
+
+    if (req.isAuthenticated()) {
+//      console.log("me._sessionToken - ", req.user._sessionToken);
+//      Parse.User.become(req.user._sessionToken, function(user){
+//        return res.json(req.user);
+//      });
+      return res.json(req.user);
+    }
+    else {
+      return res.json({ error : "User is not authenticated." })
+    }
+
+  }
 };

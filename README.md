@@ -14,6 +14,8 @@ git rm assets/famous-time
 
 How to start
 
+sudo npm install
+
 git submodule init
 git submoudle update --init
 

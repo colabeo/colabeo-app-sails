@@ -77,6 +77,11 @@ module.exports.routes = {
   'post /login': {
     controller: 'user',
     action: 'login'
+  },
+
+  'get /me': {
+    controller: 'user',
+    action: 'me'
   }
 
   /*

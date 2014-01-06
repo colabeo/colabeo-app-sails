@@ -58,7 +58,7 @@ module.exports.routes = {
     controller: 'user',
     action: 'findUserByExternalAccount'
   },
-  
+
   'get /register': {
     controller: 'user',
     action: 'registrationForm'
@@ -72,6 +72,11 @@ module.exports.routes = {
   'get /login': {
     controller: 'user',
     action: 'loginForm'
+  },
+
+  'get /logout': {
+    controller: 'auth',
+    action: 'logout'
   },
 
   'post /signup': {

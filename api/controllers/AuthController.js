@@ -133,6 +133,14 @@ module.exports = {
       }
     )(req, res, next);
 
+  },
+
+  logout : function(req, res, next) {
+    req.logout();
+    req.User.logOut();
+
+    res.clearCookie('_sessionToken');
+    res.redirect('/');
   }
 
 };

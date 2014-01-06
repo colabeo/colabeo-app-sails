@@ -20,7 +20,7 @@ module.exports = function(req, res, next) {
 //  return res.forbidden('You are not permitted to perform this action.');
 
   if (req.isAuthenticated()) {
-    console.log("user is authenticated", req.user);
+//    console.log("user is authenticated", req.user);
     return next();
   }
 

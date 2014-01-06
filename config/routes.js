@@ -102,6 +102,11 @@ module.exports.routes = {
   'get /auth/:provider/callback': {
     controller: 'auth',
     action: 'loginWithCallback'
+  },
+
+  'get /auth/:provider/:scope': {
+    controller: 'auth',
+    action: 'loginWith'
   }
 
   /*

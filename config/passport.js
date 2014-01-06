@@ -1,6 +1,7 @@
 var passport    = require('passport'),
     LocalStrategy = require('passport-local').Strategy,
     FacebookStrategy = require('passport-facebook').Strategy,
+    GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
     Parse = require('parse').Parse,
     bcrypt = require('bcrypt'),
     flash = require('connect-flash');
@@ -116,6 +117,70 @@ passport.use(new FacebookStrategy({
     });
   }
 ));
+
+var GOOGLEPLUS_CLIENT_ID = '526862954475.apps.googleusercontent.com';
+var GOOGLEPLUS_CLIENT_SECRET = 'r0wARG9mQuJxYFPGmYIzoYLH';
+
+passport.use(new GoogleStrategy({
+    clientID: GOOGLEPLUS_CLIENT_ID,
+    clientSecret: GOOGLEPLUS_CLIENT_SECRET,
+    callbackURL: HOST_SERVER_URL + "/auth/google/callback",
+    passReqToCallback: true
+  },
+  function (req, accessToken, refreshToken, profile, done) {
+    console.log('@GoogleStrategy - After login, AccessToken=' + accessToken);
+    console.log('@GoogleStrategy - After login, refreshToken=' + refreshToken);
+    console.log('provider - ', profile._raw);
+//    var provider = profile._raw;
+
+    //TODO: change the expiration date
+    var authData = {
+      "anonymous": {
+        "id": profile._json.id,
+        "provider": "google",
+        "access_token": accessToken
+//        "expiration_date": "2014-02-01T10:10:00.000Z"
+      }
+    };
+
+    var user = new Parse.User();
+    //TODO: use generated GUID (or we should use crypt username - in order to login) as the password
+    var password = "abcd1234";
+    var username = profile.provider + ":" + profile._json.id;
+    user.set("lastname", profile._json.last_name);
+    user.set("firstname", profile._json.first_name);
+    user.set("username", username);
+    user.set("password", password);
+    user.set("authData", authData);
+
+    //TODO: add login only logic, if the user is already registered
+    user.signUp(null, {
+      success: function(savedUser) {
+        console.log("Sign up with googleplus - success");
+        console.log("User  - ", username, password);
+        Parse.User.logIn(username, password, {
+
+          success: function (loggedInUser) {
+            console.log("Logged In with sign up with googleplus - success")
+            return done(null, loggedInUser);
+          },
+
+          error: function (errorUser, error) {
+            console.log("login after sign up with googleplus - error" + JSON.stringify(error));
+            return done(null, false, error.message);
+          }
+
+        });
+      },
+      error: function(errorUser, error) {
+        // Show the error message somewhere and let the user try again.
+        // alert("Error: " + error.code + " " + error.message);
+        console.log("Sign up with googleplus - error", error.message);
+        req.flash('error', error.message);
+        done(null, false, error.message);
+      }
+    });
+  }))
 
 module.exports = {
 

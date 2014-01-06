@@ -74,11 +74,11 @@ module.exports = {
 //            failureRedirect: this.urlFor({ action: 'login' }),
         failureFlash: true
       }, function(err, user, info) {
-        console.log("after login ", user);
-        console.log("req.isAuthenticated() ", req.isAuthenticated());
-//      console.log("next ", next);
-        console.log("err ", err);
-        console.log("info ", info);
+//        console.log("after login ", user);
+//        console.log("req.isAuthenticated() ", req.isAuthenticated());
+////      console.log("next ", next);
+//        console.log("err ", err);
+//        console.log("info ", info);
 
         req.flash('error', info);
 
@@ -87,8 +87,8 @@ module.exports = {
 
         req.logIn(user, function(err) {
           if (err) { return next(err); }
-          console.log("user ", user);
-          console.log("RememberMe ", req.body.RememberMe);
+//          console.log("user ", user);
+//          console.log("RememberMe ", req.body.RememberMe);
           if ((user) && (req.body.RememberMe)) {
             res.cookie('_sessionToken', user._sessionToken, {expires: new Date(Date.now() + COOKIE_LIFECYCLE), httpOnly: true});
           }
@@ -101,7 +101,10 @@ module.exports = {
   loginWith : function(req, res, next) {
     var provider = req.param("provider");
     console.log("loginWith ", provider);
-    passport.authenticate(provider, { failureRedirect: '/login' })(req, res, next);
+
+    var scope = req.param("scope");
+    console.log(decodeURIComponent(scope));
+    passport.authenticate(provider, { failureRedirect: '/login' , scope : decodeURIComponent(scope) })(req, res, next);
   },
 
   loginWithCallback : function(req, res, next) {

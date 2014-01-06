@@ -36,7 +36,12 @@ module.exports = {
   loginForm : function(req, res, next) {
     var message = req.flash('error');
     console.log('login for message', message);
-    return res.view({ message : message });
+
+    //var scope = encodeURIComponent('["https://www.googleapis.com/auth/plus.login", "https://www.googleapis.com/auth/userinfo.profile"]');
+    var scope = encodeURIComponent('https://www.googleapis.com/auth/plus.login');
+    console.log(scope);
+
+    return res.view({ message : message, googlescope : scope });
   },
 
   forgetPasswordForm : function(req, res, next) {
@@ -135,14 +140,14 @@ module.exports = {
   findUserByExternalAccount : function(req, res, next) {
     var provider = req.param('provider');
     var externalId = req.param('externalId');
-    console.log("External Account: ", provider, externalId);
+//    console.log("External Account: ", provider, externalId);
     var query = new Parse.Query(Parse.User);
 
     if ((!provider) || (provider === 'email')) {
       query.equalTo("email", externalId);
       query.find({
         success: function(users) {
-          console.log("user - " + JSON.stringify(users[0]));
+//          console.log("user - " + JSON.stringify(users[0]));
           return res.json({ callee :  users[0] });
         }
       });
@@ -150,7 +155,7 @@ module.exports = {
     else {
       // TODO: add other provider search here
     }
-  },
+  }
 
 //  loginWith : function(req, res, next) {
 //    var provider = req.param("provider");

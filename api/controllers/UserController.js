@@ -38,7 +38,7 @@ module.exports = {
     console.log('login for message', message);
 
     //var scope = encodeURIComponent('["https://www.googleapis.com/auth/plus.login", "https://www.googleapis.com/auth/userinfo.profile"]');
-    var scope = encodeURIComponent('https://www.googleapis.com/auth/plus.login');
+    var scope = encodeURIComponent('profile email https://www.googleapis.com/auth/plus.login');
     console.log(scope);
 
     return res.view({ message : message, googlescope : scope });

@@ -57,6 +57,70 @@ var FACEBOOK_APP_ID = '1428317197384013';
 var FACEBOOK_APP_SECRET = 'd03fd6db99a7b1c5dd0d82b6d61126ca';
 var HOST_SERVER_URL = 'http://localhost:1337';
 
+var socialAccountAuthenticationHandler = function (user, username, password, done) {
+  process.nextTick(function () {
+
+    // Get the user from a non-authenticated method
+    var query = new Parse.Query(Parse.User);
+    console.log("Query user - ", user.get("username"));
+    query.equalTo("username", user.get("username"));
+    query.find({
+      success: function(colabeoUser) {
+        if (colabeoUser.length > 0) {
+          console.log("colabeoUser - ", colabeoUser);
+          Parse.User.logIn(username, password, {
+
+            success: function (loggedInUser) {
+              console.log("Logged In with sign up with provider - success")
+              return done(null, loggedInUser);
+            },
+
+            error: function (errorUser, error) {
+              console.log("login after sign up with provider - error" + JSON.stringify(error));
+              return done(null, false, error.message);
+            }
+
+          });
+
+        } else {
+          console.log("new colabeo user - sign up");
+          user.signUp(null, {
+            success: function(savedUser) {
+              console.log("Sign up  - success");
+              console.log("User  - ", username, password);
+              Parse.User.logIn(username, password, {
+
+                success: function (loggedInUser) {
+                  console.log("Logged In with sign up with provider - success")
+                  return done(null, loggedInUser);
+                },
+
+                error: function (errorUser, error) {
+                  console.log("login after sign up with provider - error" + JSON.stringify(error));
+                  return done(null, false, error.message);
+                }
+
+              });
+            },
+            error: function(errorUser, error) {
+              // Show the error message somewhere and let the user try again.
+              // alert("Error: " + error.code + " " + error.message);
+              console.log("Sign up with provider - error", error.message);
+              req.flash('error', error.message);
+              return done(null, false, error.message);
+            }
+          });
+        }
+      },
+      error: function(error) {
+        console.log("find user error ", error);
+        return done(null, false, error.message);
+      }
+    });
+
+  });
+};
+
 passport.use(new FacebookStrategy({
     clientID: FACEBOOK_APP_ID,
     clientSecret: FACEBOOK_APP_SECRET,
@@ -88,33 +152,34 @@ passport.use(new FacebookStrategy({
     user.set("password", password);
     user.set("authData", authData);
 
-    //TODO: add login only logic, if the user is already registered
-    user.signUp(null, {
-      success: function(savedUser) {
-        console.log("Sign up with facebook - success");
-        console.log("User  - ", username, password);
-        Parse.User.logIn(username, password, {
+    socialAccountAuthenticationHandler(user, username, password, done);
 
-          success: function (loggedInUser) {
-            console.log("Logged In with sign up with facebook - success")
-            return done(null, loggedInUser);
-          },
-
-          error: function (errorUser, error) {
-            console.log("login after sign up with facebook - error" + JSON.stringify(error));
-            return done(null, false, error.message);
-          }
-
-        });
-      },
-      error: function(errorUser, error) {
-        // Show the error message somewhere and let the user try again.
-        // alert("Error: " + error.code + " " + error.message);
-        console.log("Sign up with facebook - error", error.message);
-        req.flash('error', error.message);
-        done(null, false, error.message);
-      }
-    });
+//    user.signUp(null, {
+//      success: function(savedUser) {
+//        console.log("Sign up with facebook - success");
+//        console.log("User  - ", username, password);
+//        Parse.User.logIn(username, password, {
+//
+//          success: function (loggedInUser) {
+//            console.log("Logged In with sign up with facebook - success")
+//            return done(null, loggedInUser);
+//          },
+//
+//          error: function (errorUser, error) {
+//            console.log("login after sign up with facebook - error" + JSON.stringify(error));
+//            return done(null, false, error.message);
+//          }
+//
+//        });
+//      },
+//      error: function(errorUser, error) {
+//        // Show the error message somewhere and let the user try again.
+//        // alert("Error: " + error.code + " " + error.message);
+//        console.log("Sign up with facebook - error", error.message);
+//        req.flash('error', error.message);
+//        done(null, false, error.message);
+//      }
+//    });
   }
 ));
 
@@ -146,40 +211,73 @@ passport.use(new GoogleStrategy({
     var user = new Parse.User();
     //TODO: use generated GUID (or we should use crypt username - in order to login) as the password
     var password = "abcd1234";
-    var username = profile.provider + ":" + profile._json.id;
-    user.set("lastname", profile._json.last_name);
-    user.set("firstname", profile._json.first_name);
+    //var username = profile.provider + ":" + profile._json.id;
+    var username = profile._json.email;
+    user.set("lastname", profile._json.family_name);
+    user.set("firstname", profile._json.given_name);
     user.set("username", username);
+    user.set("email", profile._json.email);
     user.set("password", password);
     user.set("authData", authData);
 
-    //TODO: add login only logic, if the user is already registered
-    user.signUp(null, {
-      success: function(savedUser) {
-        console.log("Sign up with googleplus - success");
-        console.log("User  - ", username, password);
-        Parse.User.logIn(username, password, {
+    socialAccountAuthenticationHandler(user, username, password, done);
 
-          success: function (loggedInUser) {
-            console.log("Logged In with sign up with googleplus - success")
-            return done(null, loggedInUser);
-          },
-
-          error: function (errorUser, error) {
-            console.log("login after sign up with googleplus - error" + JSON.stringify(error));
-            return done(null, false, error.message);
-          }
-
-        });
-      },
-      error: function(errorUser, error) {
-        // Show the error message somewhere and let the user try again.
-        // alert("Error: " + error.code + " " + error.message);
-        console.log("Sign up with googleplus - error", error.message);
-        req.flash('error', error.message);
-        done(null, false, error.message);
-      }
-    });
+//    // Get the user from a non-authenticated method
+//    var query = new Parse.Query(Parse.User);
+//    console.log("Query user - ", user.get("username"));
+//    query.equalTo("username", user.get("username"));
+//    query.find({
+//      success: function(colabeoUser) {
+//        if (colabeoUser) {
+//          console.log("colabeoUser - ", colabeoUser);
+//          Parse.User.logIn(username, password, {
+//
+//            success: function (loggedInUser) {
+//              console.log("Logged In with sign up with googleplus - success")
+//              return done(null, loggedInUser);
+//            },
+//
+//            error: function (errorUser, error) {
+//              console.log("login after sign up with googleplus - error" + JSON.stringify(error));
+//              return done(null, false, error.message);
+//            }
+//
+//          });
+//
+//        } else {
+//          user.signUp(null, {
+//            success: function(savedUser) {
+//              console.log("Sign up with googleplus - success");
+//              console.log("User  - ", username, password);
+//              Parse.User.logIn(username, password, {
+//
+//                success: function (loggedInUser) {
+//                  console.log("Logged In with sign up with googleplus - success")
+//                  return done(null, loggedInUser);
+//                },
+//
+//                error: function (errorUser, error) {
+//                  console.log("login after sign up with googleplus - error" + JSON.stringify(error));
+//                  return done(null, false, error.message);
+//                }
+//
+//              });
+//            },
+//            error: function(errorUser, error) {
+//              // Show the error message somewhere and let the user try again.
+//              // alert("Error: " + error.code + " " + error.message);
+//              console.log("Sign up with googleplus - error", error.message);
+//              req.flash('error', error.message);
+//              return done(null, false, error.message);
+//            }
+//          });
+//        }
+//      },
+//      error: function(error) {
+//        console.log("find user error ", error);
+//        return done(null, false, error.message);
+//      }
+//    });
   }))
 
 module.exports = {

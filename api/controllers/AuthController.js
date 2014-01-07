@@ -103,8 +103,12 @@ module.exports = {
     console.log("loginWith ", provider);
 
     var scope = req.param("scope");
-    console.log(decodeURIComponent(scope));
-    passport.authenticate(provider, { failureRedirect: '/login' , scope : decodeURIComponent(scope) })(req, res, next);
+    if (scope) {
+      console.log(decodeURIComponent(scope));
+      passport.authenticate(provider, { failureRedirect: '/login' , scope : decodeURIComponent(scope) })(req, res, next);
+    } else {
+      passport.authenticate(provider, { failureRedirect: '/login' })(req, res, next);
+    }
   },
 
   loginWithCallback : function(req, res, next) {

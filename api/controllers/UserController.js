@@ -141,9 +141,10 @@ module.exports = {
     var provider = req.param('provider');
     var externalId = req.param('externalId');
 //    console.log("External Account: ", provider, externalId);
-    var query = new Parse.Query(Parse.User);
+
 
     if ((!provider) || (provider === 'email')) {
+      var query = new Parse.Query(Parse.User);
       query.equalTo("email", externalId);
       query.find({
         success: function(users) {
@@ -153,7 +154,14 @@ module.exports = {
       });
     }
     else {
-      // TODO: add other provider search here
+      var query = new Parse.Query("Account");
+      query.equalTo("externalId", externalId);
+      query.find({
+        success: function(accounts) {
+//          console.log("user - " + JSON.stringify(users[0]));
+          return res.json({ callee :  accounts[0] });
+        }
+      });
     }
   }
 

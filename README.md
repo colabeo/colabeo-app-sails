@@ -19,7 +19,7 @@ sudo npm install
 
 git submodule init
 
-git submoudle update --init
+git submodule update --init
 
 cd assets/famous-time
 

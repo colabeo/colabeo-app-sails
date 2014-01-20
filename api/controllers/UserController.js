@@ -155,6 +155,7 @@ module.exports = {
     }
     else {
       var query = new Parse.Query("Account");
+      query.equalTo("provider", provider);
       query.equalTo("externalId", externalId);
       query.find({
         success: function(accounts) {

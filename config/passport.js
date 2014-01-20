@@ -177,32 +177,6 @@ passport.use(new FacebookStrategy({
 
     socialAccountAuthenticationHandler(user, username, password, done);
 
-//    user.signUp(null, {
-//      success: function(savedUser) {
-//        console.log("Sign up with facebook - success");
-//        console.log("User  - ", username, password);
-//        Parse.User.logIn(username, password, {
-//
-//          success: function (loggedInUser) {
-//            console.log("Logged In with sign up with facebook - success")
-//            return done(null, loggedInUser);
-//          },
-//
-//          error: function (errorUser, error) {
-//            console.log("login after sign up with facebook - error" + JSON.stringify(error));
-//            return done(null, false, error.message);
-//          }
-//
-//        });
-//      },
-//      error: function(errorUser, error) {
-//        // Show the error message somewhere and let the user try again.
-//        // alert("Error: " + error.code + " " + error.message);
-//        console.log("Sign up with facebook - error", error.message);
-//        req.flash('error', error.message);
-//        done(null, false, error.message);
-//      }
-//    });
   }
 ));
 

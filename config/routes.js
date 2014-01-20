@@ -107,6 +107,16 @@ module.exports.routes = {
   'get /auth/:provider/:scope': {
     controller: 'auth',
     action: 'loginWith'
+  },
+
+  'post /contact/add' : {
+    controller: 'contact',
+    action: 'add'
+  },
+
+  'get /contact/:source': {
+    controller: 'contact',
+    action: 'getAll'
   }
 
   /*

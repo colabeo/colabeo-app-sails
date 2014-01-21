@@ -197,6 +197,11 @@ module.exports = {
 
       console.log("authData ", this.get("authData"));
 
+      if (!this.get("authData").facebook) {
+        return res.json({
+          status: 401
+        }, 401);
+      }
       // retrieve accessToken from user
       var accessToken = this.get("authData").facebook.access_token;
       var apiPath = "/me/friends";
@@ -221,16 +226,16 @@ module.exports = {
           var friendlist = JSON.parse(buffer);
           friendlist = friendlist.data;
 
+          console.log("friendlist ", friendlist);
+
           var contacts = [];
           for (var i = 0; i < friendlist.length; i++) {
             var tmp = {
-              handle: {
-                facebook: friendlist[i].id
-              },
-              id: friendlist[i].name,
+              provider: "facebook",
+              id: friendlist[i].id,
+              name: friendlist[i].name,
               avatar: 'http://graph.facebook.com/' + friendlist[i].id + '/picture'
             };
-
             contacts.push(tmp);
           }
           done(contacts);
@@ -245,7 +250,64 @@ module.exports = {
     };
 
     user.importGoogleContacts = function(done) {
+      console.log("importGoogleContacts()");
 
+      var self = this;
+
+      console.log("authData ", this.get("authData"));
+
+      var googlePlusAuthData = this.get("authData").anonymous;
+      if ((!googlePlusAuthData) || (googlePlusAuthData.provider !== "google")) {
+        return res.json({
+          status: 401
+        }, 401);
+      }
+
+      // retrieve accessToken from user
+      var accessToken = googlePlusAuthData.access_token;
+      var apiPath = "/me/friends";
+
+      console.log(accessToken);
+
+      var options = {
+        host: 'graph.facebook.com',
+        port: 443,
+        path: apiPath + '?access_token=' + accessToken, //apiPath example: '/me/friends'
+        method: 'GET'
+      };
+
+      var buffer = ''; //this buffer will be populated with the chunks of the data received from facebook
+      var request = https.get(options, function(result){
+        result.setEncoding('utf8');
+        result.on('data', function(chunk){
+          buffer += chunk;
+        });
+
+        result.on('end', function(){
+          var friendlist = JSON.parse(buffer);
+          friendlist = friendlist.data;
+
+          console.log("friendlist ", friendlist);
+
+          var contacts = [];
+          for (var i = 0; i < friendlist.length; i++) {
+            var tmp = {
+              provider: "facebook",
+              id: friendlist[i].id,
+              name: friendlist[i].name,
+              avatar: 'http://graph.facebook.com/' + friendlist[i].id + '/picture'
+            };
+            contacts.push(tmp);
+          }
+          done(contacts);
+        });
+      });
+
+      request.on('error', function(e){
+        console.log('error from getData: ' + e.message)
+      });
+
+      request.end();
     };
 
     user.initFirebaseRef(user.id, serverRootRef);

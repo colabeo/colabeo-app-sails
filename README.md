@@ -7,9 +7,9 @@ git submodule add git@github.com:colabeo/colabeo-client.git assets/famous-time
 
 How to remove a git submodule
 
-git submodule deinit assets/famous-time
+git submodule deinit -f assets/famous-time
 
-git rm assets/famous-time
+git rm -f assets/famous-time
 
 ==============================================================================
 

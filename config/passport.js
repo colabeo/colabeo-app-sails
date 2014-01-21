@@ -53,9 +53,21 @@ passport.use(new LocalStrategy({
 ));
 
 // TODO: Put these into the config file
-var FACEBOOK_APP_ID = '1428317197384013';
-var FACEBOOK_APP_SECRET = 'd03fd6db99a7b1c5dd0d82b6d61126ca';
-var HOST_SERVER_URL = 'http://localhost:1337';
+var os = require("os");
+var hoststring = os.hostname();
+
+if ( hoststring.match("local") )  {
+    var FACEBOOK_APP_ID = '1428317197384013';
+    var FACEBOOK_APP_SECRET = 'd03fd6db99a7b1c5dd0d82b6d61126ca';
+    var HOST_SERVER_URL = 'http://localhost:1337';
+}
+else {
+    var FACEBOOK_APP_ID = '686271008083898';
+    var FACEBOOK_APP_SECRET = '6cbe30c8c9655e28f3a148876a819565';
+    var HOST_SERVER_URL = 'https://dashboard.colabeo.com';
+}
+
+console.log("FACEBOOK ID + SECRET " + FACEBOOK_APP_ID + ", " + FACEBOOK_APP_SECRET );
 
 var socialAccountAuthenticationHandler = function (user, username, password, done) {
   process.nextTick(function () {

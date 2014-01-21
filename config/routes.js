@@ -109,6 +109,21 @@ module.exports.routes = {
     action: 'loginWith'
   },
 
+  'get /connect/:provider' : {
+    controller: 'auth',
+    action: 'connectWith'
+  },
+
+  'get /connect/:provider/callback': {
+    controller: 'auth',
+    action: 'connectWithCallback'
+  },
+
+  'get /connect/:provider/:scope': {
+    controller: 'auth',
+    action: 'connectWith'
+  },
+
   'post /contact/add' : {
     controller: 'contact',
     action: 'add'

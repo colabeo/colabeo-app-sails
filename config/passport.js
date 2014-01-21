@@ -192,6 +192,17 @@ passport.use(new FacebookStrategy({
   }
 ));
 
+passport.use("facebook-connect", new FacebookStrategy({
+    clientID: FACEBOOK_APP_ID,
+    clientSecret: FACEBOOK_APP_SECRET,
+    callbackURL: HOST_SERVER_URL + "/auth/facebook/callback",
+    passReqToCallback: true
+  },
+  function (req, facebookAccessToken, refreshToken, profile, done) {
+
+  }
+));
+
 var GOOGLEPLUS_CLIENT_ID = '526862954475.apps.googleusercontent.com';
 var GOOGLEPLUS_CLIENT_SECRET = 'r0wARG9mQuJxYFPGmYIzoYLH';
 

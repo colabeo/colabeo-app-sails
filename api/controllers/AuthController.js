@@ -153,6 +153,22 @@ module.exports = {
     } else {
       res.redirect('/');
     }
-  }
+  },
 
+  connectWith : function(req, res, next) {
+    var provider = req.param("provider");
+    console.log("connectWith", provider);
+
+    var scope = req.param("scope");
+    if (scope) {
+      console.log(decodeURIComponent(scope));
+      passport.authorize(provider + '-connect', { failureRedirect: '/' , scope : decodeURIComponent(scope) })(req, res, next);
+    } else {
+      passport.authorize(provider + '-connect', { failureRedirect: '/' })(req, res, next);
+    }
+  },
+
+  connectWithCallback: function(req, res, next) {
+
+  }
 };

@@ -60,7 +60,7 @@ if ( hoststring.match("local") )  {
     var FACEBOOK_APP_ID = '1428317197384013';
     var FACEBOOK_APP_SECRET = 'd03fd6db99a7b1c5dd0d82b6d61126ca';
     var HOST_SERVER_URL = 'http://localhost:1337';
-}
+} //Development Facebook
 else {
     var FACEBOOK_APP_ID = '686271008083898';
     var FACEBOOK_APP_SECRET = '6cbe30c8c9655e28f3a148876a819565';

@@ -169,6 +169,17 @@ module.exports = {
   },
 
   connectWithCallback: function(req, res, next) {
-
+    var provider = req.param("provider");
+    console.log("connectWithCallback", provider)
+    passport.authorize(provider + "-connect", {
+        failureRedirect: '/'
+      },
+        function(a, b) {
+          console.log("a", a);
+          console.log("b", b);
+          console.log("after authorize", req.user);
+          return res.redirect('/');
+        }
+    )(req, res, next);
   }
 };

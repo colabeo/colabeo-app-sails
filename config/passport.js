@@ -17,6 +17,9 @@ passport.serializeUser(function (user, done) {
 
 // repopulate req.user
 passport.deserializeUser(function (sessionToken, done) {
+
+  console.log("deserializeUser");
+
   if (sessionToken) {
     Parse.User.become(sessionToken, function(user) {
       done(null, user);
@@ -69,7 +72,7 @@ else {
 
 console.log("FACEBOOK ID + SECRET " + FACEBOOK_APP_ID + ", " + FACEBOOK_APP_SECRET );
 
-var socialAccountAuthenticationHandler = function (user, username, password, done) {
+var socialAccountAuthenticationHandler = function (user, username, password, provider, externalId, done) {
   process.nextTick(function () {
 
     // Get the user from a non-authenticated method
@@ -107,9 +110,9 @@ var socialAccountAuthenticationHandler = function (user, username, password, don
                   // Create social account linkage
                   var Account = Parse.Object.extend("Account");
                   var account = new Account();
-                  account.set("externalId", "lapchan@gmail.com");
+                  account.set("provider", provider);
+                  account.set("externalId", externalId);
                   account.set("user", loggedInUser);
-                  account.set("provider", "google");
                   account.save();
 
                   console.log("Logged In with sign up with provider - success");
@@ -169,11 +172,22 @@ passport.use(new FacebookStrategy({
     var provider = profile._raw;
 
     //TODO: change the expiration date
+//    var authData = {
+//      "facebook": {
+//        "id": provider.id,
+//        "access_token": facebookAccessToken,
+//        "expiration_date": "2014-02-01T10:10:00.000Z"
+//      }
+//    };
+
+    //TODO: change the expiration date
     var authData = {
-      "facebook": {
-        "id": provider.id,
-        "access_token": facebookAccessToken,
-        "expiration_date": "2014-02-01T10:10:00.000Z"
+      "anonymous": {
+        "facebook" : {
+          "id": profile._json.id,
+          "access_token": facebookAccessToken
+//        "expiration_date": "2014-02-01T10:10:00.000Z"
+        }
       }
     };
 
@@ -187,7 +201,7 @@ passport.use(new FacebookStrategy({
     user.set("password", password);
     user.set("authData", authData);
 
-    socialAccountAuthenticationHandler(user, username, password, done);
+    socialAccountAuthenticationHandler(user, username, password, "facebook", profile._json.id, done);
 
   }
 ));
@@ -195,10 +209,42 @@ passport.use(new FacebookStrategy({
 passport.use("facebook-connect", new FacebookStrategy({
     clientID: FACEBOOK_APP_ID,
     clientSecret: FACEBOOK_APP_SECRET,
-    callbackURL: HOST_SERVER_URL + "/auth/facebook/callback",
+    callbackURL: HOST_SERVER_URL + "/connect/facebook/callback",
     passReqToCallback: true
   },
   function (req, facebookAccessToken, refreshToken, profile, done) {
+
+    console.log("profile", profile._json.id);
+    //TODO: change the expiration date
+
+    var authData = req.user.get("authData");
+    if (authData) {
+      authData.anonymous.facebook = {
+        "id": profile._json.id,
+        "access_token": facebookAccessToken
+      };
+    } else {
+      authData = {
+        "anonymous": {
+          "facebook" : {
+            "id": profile._json.id,
+            "access_token": facebookAccessToken
+          }
+        }
+      };
+    }
+
+    console.log("authData", authData);
+
+    req.user.set("authData", authData);
+    req.user.save(null, {
+      success: function(user) {
+        return done(null, user);
+      },
+      error: function(user, error) {
+        return done(error, user);
+      }
+    });
 
   }
 ));
@@ -221,10 +267,10 @@ passport.use(new GoogleStrategy({
     //TODO: change the expiration date
     var authData = {
       "anonymous": {
-        "id": profile._json.id,
-        "provider": "google",
-        "access_token": accessToken
-//        "expiration_date": "2014-02-01T10:10:00.000Z"
+        "google" : {
+          "id": profile._json.id,
+          "access_token": accessToken
+        }
       }
     };
 
@@ -240,64 +286,8 @@ passport.use(new GoogleStrategy({
     user.set("password", password);
     user.set("authData", authData);
 
-    socialAccountAuthenticationHandler(user, username, password, done);
+    socialAccountAuthenticationHandler(user, username, password, "google", profile._json.id, done);
 
-//    // Get the user from a non-authenticated method
-//    var query = new Parse.Query(Parse.User);
-//    console.log("Query user - ", user.get("username"));
-//    query.equalTo("username", user.get("username"));
-//    query.find({
-//      success: function(colabeoUser) {
-//        if (colabeoUser) {
-//          console.log("colabeoUser - ", colabeoUser);
-//          Parse.User.logIn(username, password, {
-//
-//            success: function (loggedInUser) {
-//              console.log("Logged In with sign up with googleplus - success")
-//              return done(null, loggedInUser);
-//            },
-//
-//            error: function (errorUser, error) {
-//              console.log("login after sign up with googleplus - error" + JSON.stringify(error));
-//              return done(null, false, error.message);
-//            }
-//
-//          });
-//
-//        } else {
-//          user.signUp(null, {
-//            success: function(savedUser) {
-//              console.log("Sign up with googleplus - success");
-//              console.log("User  - ", username, password);
-//              Parse.User.logIn(username, password, {
-//
-//                success: function (loggedInUser) {
-//                  console.log("Logged In with sign up with googleplus - success")
-//                  return done(null, loggedInUser);
-//                },
-//
-//                error: function (errorUser, error) {
-//                  console.log("login after sign up with googleplus - error" + JSON.stringify(error));
-//                  return done(null, false, error.message);
-//                }
-//
-//              });
-//            },
-//            error: function(errorUser, error) {
-//              // Show the error message somewhere and let the user try again.
-//              // alert("Error: " + error.code + " " + error.message);
-//              console.log("Sign up with googleplus - error", error.message);
-//              req.flash('error', error.message);
-//              return done(null, false, error.message);
-//            }
-//          });
-//        }
-//      },
-//      error: function(error) {
-//        console.log("find user error ", error);
-//        return done(null, false, error.message);
-//      }
-//    });
   }))
 
 module.exports = {

@@ -246,8 +246,6 @@ module.exports = {
             "objectId": users[0].id
           } ] };
 
-          console.log("result after consolidation 1 ", result);
-          console.log("result after consolidation 2 ", callee);
           return res.json(result);
         },
         error: function(error) {

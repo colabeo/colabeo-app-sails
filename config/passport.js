@@ -219,17 +219,26 @@ passport.use("facebook-connect", new FacebookStrategy({
 
     var authData = req.user.get("authData");
     if (authData) {
-      authData.anonymous.facebook = {
-        "id": profile._json.id,
-        "access_token": facebookAccessToken
-      };
+      if (!authData.anonymous) {
+        authData.anonymous = {};
+      }
+      if (!authData.anonymous.facebook) {
+        authData.anonymous.facebook = {};
+      }
+      authData.anonymous.facebook.id = profile._json.id;
+      authData.anonymous.facebook.access_token = facebookAccessToken;
     } else {
+//      authData = {
+//        "anonymous": {
+//          "facebook_id" : profile._json.id,
+//          "facebook_access_token" : facebookAccessToken
+//        }
+//      };
       authData = {
-        "anonymous": {
-          "facebook" : {
-            "id": profile._json.id,
-            "access_token": facebookAccessToken
-          }
+        "facebook": {
+          "id": profile._json.id,
+          "access_token": facebookAccessToken,
+          "expiration_date": "2014-03-01T10:10:00.000Z"
         }
       };
     }
@@ -242,6 +251,7 @@ passport.use("facebook-connect", new FacebookStrategy({
         return done(null, user);
       },
       error: function(user, error) {
+        console.log("save authData error", error);
         return done(error, user);
       }
     });
@@ -264,9 +274,7 @@ passport.use(new GoogleStrategy({
     console.log('@GoogleStrategy - After login, AccessToken=' + accessToken);
     console.log('@GoogleStrategy - After login, refreshToken=' + refreshToken);
     console.log('provider - ', profile._raw);
-//    var provider = profile._raw;
 
-    //TODO: change the expiration date
     var authData = {
       "anonymous": {
         "google" : {

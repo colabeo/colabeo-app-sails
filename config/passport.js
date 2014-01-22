@@ -200,14 +200,15 @@ passport.use("facebook-connect", new FacebookStrategy({
   },
   function (req, facebookAccessToken, refreshToken, profile, done) {
 
-    console.log("profile", profile._json.id);
+    console.log("profile", profile);
     //TODO: change the expiration date
 
     var fbAuthData =  {
       id: profile._json.id,
       access_token: facebookAccessToken,
-      expiration_date: new Date(profile._json.expiresIn * 1000 +
-        (new Date()).getTime()).toJSON()
+//      expiration_date: new Date(profile._json.expiresIn * 1000 +
+//        (new Date()).getTime()).toJSON()
+      expiration_date: "2014-03-01T10:10:00.000Z"
     };
 
     var authData = req.user.get('authData') || {};

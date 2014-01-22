@@ -122,7 +122,7 @@ module.exports = {
 //    )(req, res, next);
 //  },
 
-  me : function(req, res, next) {
+  me : function(req, res) {
 
     if (req.isAuthenticated()) {
 //      console.log("me._sessionToken - ", req.user._sessionToken);
@@ -137,11 +137,10 @@ module.exports = {
 
   },
 
-  findUserByExternalAccount : function(req, res, next) {
+  findUserByExternalAccount : function(req, res) {
+
     var provider = req.param('provider');
     var externalId = req.param('externalId');
-//    console.log("External Account: ", provider, externalId);
-
 
     if ((!provider) || (provider === 'email')) {
       var query = new Parse.Query(Parse.User);
@@ -164,43 +163,101 @@ module.exports = {
         }
       });
     }
-  }
+  },
 
-//  loginWith : function(req, res, next) {
-//    var provider = req.param("provider");
-//    console.log("loginWith ", provider);
-//    passport.authenticate(provider, { failureRedirect: '/login' })(req, res, next);
-//  },
-//
-//  loginWithCallback : function(req, res, next) {
-//    var provider = req.param("provider");
-//    console.log("loginWithCallback ", provider);
-//
-//    passport.authenticate(provider, {
-//        failureFlash: true
-//      }, function(err, user, info) {
-//        console.log("after login ", user);
-//        console.log("req.isAuthenticated() ", req.isAuthenticated());
-//        console.log("err ", err);
-//        console.log("info ", info);
-//
-//        req.flash('error', info);
-//
-//        if (err) { return next(err); }
-//        if (!user) { return res.redirect('/login'); }
-//
-//        req.logIn(user, function(err) {
-//          if (err) { return next(err); }
-////          console.log("user ", user);
-////          console.log("RememberMe ", req.body.RememberMe);
-////          if ((user) && (req.body.RememberMe)) {
-////            res.cookie('_sessionToken', user._sessionToken, {expires: new Date(Date.now() + COOKIE_LIFECYCLE), httpOnly: true});
-////          }
-//          return res.redirect('/');
-//        })
-//      }
-//    )(req, res, next);
-//
-//  }
+  findUsersByExternalAccounts : function(req, res) {
+
+    var queryString = req.param('query') ? JSON.parse(decodeURIComponent(req.param('query'))) : [];
+
+    console.log("queryString", queryString);
+
+    var queries = [];
+    var emailQueries = [];
+
+    for (var i=0; i<queryString.length; i++) {
+
+      var account = queryString[i];
+
+      if ((account.provider) && (account.eid)) {
+        if (account.provider === "email") {
+          var query = new Parse.Query(Parse.User);
+          query.equalTo("email", account.eid);
+          emailQueries.push(query);
+        } else {
+          var query = new Parse.Query("Account");
+          query.equalTo("provider", account.provider);
+          query.equalTo("externalId", account.eid);
+          queries.push(query);
+        }
+      }
+    }
+
+    if (queries.length > 0) {
+
+      var findUsersQuery = new Parse.Query("Account");
+      findUsersQuery._orQuery(queries);
+
+      findUsersQuery.find({
+        success: function(accounts) {
+          console.log("retrieve all the accounts", accounts);
+          return { callee :  accounts };
+        },
+        error: function(error) {
+          return res.json({ error : error });
+        }
+      }).then(function(callee) {
+          if (emailQueries.length > 0) {
+            console.log("retrieve email accounts");
+            var findUsersByEmailsQuery = new Parse.Query(Parse.User);
+            findUsersByEmailsQuery._orQuery(emailQueries);
+            findUsersByEmailsQuery.find({
+              success: function(users) {
+                console.log("users", users[0]);
+
+                var result = {
+                  "provider": "email",
+                  "externalId": users[0].get("email"),
+                  "objectId": users[0].id
+                }
+
+                callee.push(result);
+                console.log("result after consolidation 1 ", result);
+                console.log("result after consolidation 2 ", callee);
+                return res.json(callee);
+              },
+              error: function(error) {
+                return res.json({ error : error });
+              }
+            });
+          } else {
+            return res.json(callee);
+          }
+        });
+    } else if (emailQueries.length > 0) {
+      var findUsersByEmailsQuery = new Parse.Query(Parse.User);
+      findUsersByEmailsQuery._orQuery(emailQueries);
+      findUsersByEmailsQuery.find({
+        success: function(users) {
+          console.log("users", users[0]);
+
+          var result = { callee : [ {
+            "provider": "email",
+            "externalId": users[0].get("email"),
+            "objectId": users[0].id
+          } ] };
+
+          console.log("result after consolidation 1 ", result);
+          console.log("result after consolidation 2 ", callee);
+          return res.json(result);
+        },
+        error: function(error) {
+          return res.json({ error : error });
+        }
+      });
+    } else {
+      return res.json({ callee : [] });
+    }
+
+  }
 
 };

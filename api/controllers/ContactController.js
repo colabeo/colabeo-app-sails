@@ -197,13 +197,16 @@ module.exports = {
 
       console.log("authData ", this.get("authData"));
 
-      if (!this.get("authData").facebook) {
+      var authData = req.user.get('authData') || {};
+
+      if (!authData["facebook"]) {
         return res.json({
           status: 401
         }, 401);
       }
+
       // retrieve accessToken from user
-      var accessToken = this.get("authData").facebook.access_token;
+      var accessToken = authData["facebook"].access_token;
       var apiPath = "/me/friends";
 
       console.log(accessToken);

@@ -217,35 +217,18 @@ passport.use("facebook-connect", new FacebookStrategy({
     console.log("profile", profile._json.id);
     //TODO: change the expiration date
 
-    var authData = req.user.get("authData");
-    if (authData) {
-      if (!authData.anonymous) {
-        authData.anonymous = {};
-      }
-      if (!authData.anonymous.facebook) {
-        authData.anonymous.facebook = {};
-      }
-      authData.anonymous.facebook.id = profile._json.id;
-      authData.anonymous.facebook.access_token = facebookAccessToken;
-    } else {
-//      authData = {
-//        "anonymous": {
-//          "facebook_id" : profile._json.id,
-//          "facebook_access_token" : facebookAccessToken
-//        }
-//      };
-      authData = {
-        "facebook": {
-          "id": profile._json.id,
-          "access_token": facebookAccessToken,
-          "expiration_date": "2014-03-01T10:10:00.000Z"
-        }
-      };
-    }
+    var fbAuthData =  {
+      id: profile._json.id,
+      access_token: facebookAccessToken,
+      expiration_date: new Date(profile._json.expiresIn * 1000 +
+        (new Date()).getTime()).toJSON()
+    };
 
+    var authData = req.user.get('authData') || {};
+    authData["facebook"] = fbAuthData;
+    req.user.set("authData", authData);
     console.log("authData", authData);
 
-    req.user.set("authData", authData);
     req.user.save(null, {
       success: function(user) {
         return done(null, user);

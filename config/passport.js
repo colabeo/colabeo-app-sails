@@ -251,6 +251,8 @@ passport.use("facebook-connect", new FacebookStrategy({
 
 var GOOGLEPLUS_CLIENT_ID = '526862954475.apps.googleusercontent.com';
 var GOOGLEPLUS_CLIENT_SECRET = 'r0wARG9mQuJxYFPGmYIzoYLH';
+//var GOOGLEPLUS_CLIENT_ID = '406625335434.apps.googleusercontent.com';
+//var GOOGLEPLUS_CLIENT_SECRET = 'AIzaSyAqPnCk3pwWgHCZS2FrgZFFGvdWBRU7er4';
 
 passport.use(new GoogleStrategy({
     clientID: GOOGLEPLUS_CLIENT_ID,

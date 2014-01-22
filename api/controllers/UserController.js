@@ -240,20 +240,20 @@ module.exports = {
         success: function(users) {
           console.log("users", users[0]);
 
-          var result = { callee : [ {
+          var result = {
             "provider": "email",
             "externalId": users[0].get("email"),
             "objectId": users[0].id
-          } ] };
+          };
 
-          return res.json(result);
+          return res.json([result]);
         },
         error: function(error) {
           return res.json({ error : error });
         }
       });
     } else {
-      return res.json({ callee : [] });
+      return res.json([]);
     }
 
   }

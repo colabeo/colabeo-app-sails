@@ -117,20 +117,6 @@ var socialAccountAuthenticationHandler = function (user, username, password, pro
 
                   console.log("Logged In with sign up with provider - success");
                   return done(null, loggedInUser);
-
-//                  account.save(null, {
-//                    success: function(savedAccount) {
-//                      // Execute any logic that should take place after the object is saved.
-//                      console.log('New object created with objectId: ' + savedAccount.id);
-//
-//                    },
-//                    error: function(savedAccount, error) {
-//                      // Execute any logic that should take place if the save fails.
-//                      // error is a Parse.Error with an error code and description.
-//                      console.log('Failed to create new object, with error code: ' + error.description);
-//                      return done(null, false, error.message);
-//                    }
-//                  });
                 },
 
                 error: function (errorUser, error) {
@@ -172,24 +158,24 @@ passport.use(new FacebookStrategy({
     var provider = profile._raw;
 
     //TODO: change the expiration date
-//    var authData = {
-//      "facebook": {
-//        "id": provider.id,
-//        "access_token": facebookAccessToken,
-//        "expiration_date": "2014-02-01T10:10:00.000Z"
-//      }
-//    };
-
-    //TODO: change the expiration date
     var authData = {
-      "anonymous": {
-        "facebook" : {
-          "id": profile._json.id,
-          "access_token": facebookAccessToken
-//        "expiration_date": "2014-02-01T10:10:00.000Z"
-        }
+      "facebook": {
+        "id": provider.id,
+        "access_token": facebookAccessToken,
+        "expiration_date": "2014-02-01T10:10:00.000Z"
       }
     };
+
+    //TODO: change the expiration date
+//    var authData = {
+//      "anonymous": {
+//        "facebook" : {
+//          "id": profile._json.id,
+//          "access_token": facebookAccessToken
+////        "expiration_date": "2014-02-01T10:10:00.000Z"
+//        }
+//      }
+//    };
 
     var user = new Parse.User();
     //TODO: use generated GUID (or we should use crypt username - in order to login) as the password
@@ -231,6 +217,17 @@ passport.use("facebook-connect", new FacebookStrategy({
 
     req.user.save(null, {
       success: function(user) {
+        console.log("link with provider - success");
+
+        // Create social account linkage
+        var Account = Parse.Object.extend("Account");
+        var account = new Account();
+        account.set("provider", "facebook");
+        account.set("externalId", fbAuthData.id);
+        account.set("user", user);
+        account.save();
+
+        console.log("lookup entry created - success");
         return done(null, user);
       },
       error: function(user, error) {

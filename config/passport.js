@@ -1,3 +1,4 @@
+var sails=require('sails');
 var passport    = require('passport'),
     LocalStrategy = require('passport-local').Strategy,
     FacebookStrategy = require('passport-facebook').Strategy,
@@ -55,22 +56,7 @@ passport.use(new LocalStrategy({
   }
 ));
 
-// TODO: Put these into the config file
-var os = require("os");
-var hoststring = os.hostname();
-
-if ( hoststring.match("local") )  {
-    var FACEBOOK_APP_ID = '1428317197384013';
-    var FACEBOOK_APP_SECRET = 'd03fd6db99a7b1c5dd0d82b6d61126ca';
-    var HOST_SERVER_URL = 'http://localhost:1337';
-} //Development Facebook
-else {
-    var FACEBOOK_APP_ID = '686271008083898';
-    var FACEBOOK_APP_SECRET = '6cbe30c8c9655e28f3a148876a819565';
-    var HOST_SERVER_URL = 'https://dashboard.colabeo.com';
-} //Production Facebook
-
-console.log("FACEBOOK ID + SECRET " + FACEBOOK_APP_ID + ", " + FACEBOOK_APP_SECRET );
+console.log("FACEBOOK ID + SECRET " + sails.FACEBOOK_APP_ID + ", " + sails.FACEBOOK_APP_SECRET );
 
 var socialAccountAuthenticationHandler = function (user, username, password, provider, externalId, done) {
   process.nextTick(function () {
@@ -146,9 +132,9 @@ var socialAccountAuthenticationHandler = function (user, username, password, pro
 };
 
 passport.use(new FacebookStrategy({
-    clientID: FACEBOOK_APP_ID,
-    clientSecret: FACEBOOK_APP_SECRET,
-    callbackURL: HOST_SERVER_URL + "/auth/facebook/callback",
+    clientID: sails.FACEBOOK_APP_ID,
+    clientSecret: sails.FACEBOOK_APP_SECRET,
+    callbackURL: sails.HOST_SERVER_URL + "/auth/facebook/callback",
     passReqToCallback: true
   },
   function (req, facebookAccessToken, refreshToken, profile, done) {
@@ -179,7 +165,7 @@ passport.use(new FacebookStrategy({
 
     var user = new Parse.User();
     //TODO: use generated GUID (or we should use crypt username - in order to login) as the password
-    var password = "abcd1234";
+    var password = sails.DEFAULT_PASSWORD;
     var username = profile.provider + ":" + profile._json.id;
     user.set("lastname", profile._json.last_name);
     user.set("firstname", profile._json.first_name);
@@ -193,9 +179,9 @@ passport.use(new FacebookStrategy({
 ));
 
 passport.use("facebook-connect", new FacebookStrategy({
-    clientID: FACEBOOK_APP_ID,
-    clientSecret: FACEBOOK_APP_SECRET,
-    callbackURL: HOST_SERVER_URL + "/connect/facebook/callback",
+    clientID: sails.FACEBOOK_APP_ID,
+    clientSecret: sails.FACEBOOK_APP_SECRET,
+    callbackURL: sails.HOST_SERVER_URL + "/connect/facebook/callback",
     passReqToCallback: true
   },
   function (req, facebookAccessToken, refreshToken, profile, done) {
@@ -240,15 +226,10 @@ passport.use("facebook-connect", new FacebookStrategy({
   }
 ));
 
-var GOOGLEPLUS_CLIENT_ID = '526862954475.apps.googleusercontent.com';
-var GOOGLEPLUS_CLIENT_SECRET = 'r0wARG9mQuJxYFPGmYIzoYLH';
-//var GOOGLEPLUS_CLIENT_ID = '406625335434.apps.googleusercontent.com';
-//var GOOGLEPLUS_CLIENT_SECRET = 'AIzaSyAqPnCk3pwWgHCZS2FrgZFFGvdWBRU7er4';
-
 passport.use(new GoogleStrategy({
-    clientID: GOOGLEPLUS_CLIENT_ID,
-    clientSecret: GOOGLEPLUS_CLIENT_SECRET,
-    callbackURL: HOST_SERVER_URL + "/auth/google/callback",
+    clientID: sails.GOOGLEPLUS_CLIENT_ID,
+    clientSecret: sails.GOOGLEPLUS_CLIENT_SECRET,
+    callbackURL: sails.HOST_SERVER_URL + "/auth/google/callback",
     passReqToCallback: true
   },
   function (req, accessToken, refreshToken, profile, done) {
@@ -267,7 +248,7 @@ passport.use(new GoogleStrategy({
 
     var user = new Parse.User();
     //TODO: use generated GUID (or we should use crypt username - in order to login) as the password
-    var password = "abcd1234";
+    var password = sails.DEFAULT_PASSWORD;
     //var username = profile.provider + ":" + profile._json.id;
     var username = profile._json.email;
     user.set("lastname", profile._json.family_name);

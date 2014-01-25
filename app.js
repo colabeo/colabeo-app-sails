@@ -5,6 +5,8 @@ var DEVELOPMENT=1; // Dev Flag
 
 // Default Password for all social networks
 sails.DEFAULT_PASSWORD='abcd1234';
+// Cookie life-cycle
+sails.COOKIE_LIFECYCLE=30 * 24 * 60 * 60 * 1000; //a month
 
 // Parse App Credentials
 sails.PARSE_APP_ID = "qX7XUc4JLzh6Y3rvKYuLeELLKqHk3KAXQ4xgCoue";

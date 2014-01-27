@@ -18,7 +18,6 @@ passport.deserializeUser(function (userId, done) {
   var query = new Parse.Query(Parse.User);
   query.get(userId, {
     success: function(user) {
-      console.log("success");
       done(null, user);
     },
     error: function(object, error) {
@@ -266,8 +265,8 @@ passport.use(new GoogleStrategy({
   }))
 
 passport.use("google-connect", new GoogleStrategy({
-    clientID: GOOGLEPLUS_CLIENT_ID,
-    clientSecret: GOOGLEPLUS_CLIENT_SECRET,
+    clientID: "406625335434-009hdb2qpv8le0v2pn0kj631fjltnhkn.apps.googleusercontent.com",
+    clientSecret: "FIH9T8rkXagBW8_UWOen4csA",
     callbackURL: HOST_SERVER_URL + "/connect/google/callback",
     passReqToCallback: true
   },

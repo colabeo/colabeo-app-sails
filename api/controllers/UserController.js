@@ -256,6 +256,30 @@ module.exports = {
       return res.json([]);
     }
 
-  }
+  },
 
+  getUserExternalAccounts : function(req, res) {
+    var accountQuery = new Parse.Query("Account");
+    accountQuery.equalTo("user", req.user);
+    accountQuery.find({
+      success: function(accounts) {
+        var connectedAccounts = [];
+        for (var i=0; i<accounts.length;i++) {
+
+          var connectedAccount = {
+            provider : accounts[i].get("provider"),
+            externalId : accounts[i].get("externalId")
+          }
+
+          console.log("connectedAccount ", connectedAccount);
+          connectedAccounts.push(connectedAccount);
+        }
+        console.log("connectedAccounts", connectedAccounts);
+        return res.json(connectedAccounts);
+      },
+      error: function(error) {
+        return res.json(error);
+      }
+    });
+  }
 };

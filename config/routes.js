@@ -129,6 +129,11 @@ module.exports.routes = {
     action: 'connectWith'
   },
 
+  'get /connected': {
+    controller: 'user',
+    action: 'getUserExternalAccounts'
+  },
+
   'post /contact/add' : {
     controller: 'contact',
     action: 'add'

@@ -134,6 +134,11 @@ module.exports.routes = {
     action: 'getUserExternalAccounts'
   },
 
+  'get /disconnect/:provider' : {
+    controller: 'auth',
+    action: 'disconnectWith'
+  },
+
   'post /contact/add' : {
     controller: 'contact',
     action: 'add'

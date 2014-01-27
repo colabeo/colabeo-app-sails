@@ -180,5 +180,27 @@ module.exports = {
           return res.redirect('/');
         }
     )(req, res, next);
+  },
+
+  disconnectWith : function(req, res) {
+    var provider = req.param("provider");
+    console.log("dis-connectWith", provider);
+
+    var accountQuery = new Parse.Query("Account");
+    accountQuery.equalTo("user", req.user);
+    accountQuery.equalTo("provider", provider);
+    accountQuery.find({
+      success: function(accounts) {
+        if (accounts.length > 0) {
+          for (var i=0; i<accounts.length;i++) {
+            accounts[0].destroy();
+        }
+        }
+        return res.redirect('/');
+      },
+      error: function(error) {
+        return res.json(error);
+      }
+    });
   }
 };

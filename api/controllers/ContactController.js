@@ -5,10 +5,10 @@ var https = require('https');
 var Firebase = require('firebase');
 var FirebaseTokenGenerator = require("firebase-token-generator");
 
-var tokenGenerator = new FirebaseTokenGenerator(sails.YOUR_FIREBASE_SECRET);
+var tokenGenerator = new FirebaseTokenGenerator("EyziaFZwrpPxf8GoUOPsci9u6DCZhVzRhCjJX9VZ");
 var AUTH_TOKEN = tokenGenerator.createToken({some: "arbitrary", data: "here"});
 
-serverRootRef = new Firebase(sails.FIREBASE_URL); // this is the global Firebase object
+serverRootRef = new Firebase("https://koalalab-berry.firebaseio.com/"); // this is the global Firebase object
 // Log me in
 serverRootRef.auth(AUTH_TOKEN, function(error) {
   if(error) {

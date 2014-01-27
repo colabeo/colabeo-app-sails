@@ -118,10 +118,10 @@ module.exports = {
     passport.authenticate(provider, {
         failureFlash: true
       }, function(err, user, info) {
-        console.log("after login ", user);
-        console.log("req.isAuthenticated() ", req.isAuthenticated());
-        console.log("err ", err);
-        console.log("info ", info);
+//        console.log("after login ", user);
+//        console.log("req.isAuthenticated() ", req.isAuthenticated());
+//        console.log("err ", err);
+//        console.log("info ", info);
 
         req.flash('error', info);
 

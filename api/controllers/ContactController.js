@@ -195,61 +195,70 @@ module.exports = {
 
       var self = this;
 
-      console.log("authData ", this.get("authData"));
+      var query = new Parse.Query("Account");
+      query.equalTo("provider", "facebook");
+      query.equalTo("user", this);
+      query.find({
+        success: function(accounts) {
 
-      var authData = req.user.get('authData') || {};
-
-      if (!authData["facebook"]) {
-        return res.json({
-          status: 401
-        }, 401);
-      }
-
-      // retrieve accessToken from user
-      var accessToken = authData["facebook"].access_token;
-      var apiPath = "/me/friends";
-
-      console.log(accessToken);
-
-      var options = {
-        host: 'graph.facebook.com',
-        port: 443,
-        path: apiPath + '?access_token=' + accessToken, //apiPath example: '/me/friends'
-        method: 'GET'
-      };
-
-      var buffer = ''; //this buffer will be populated with the chunks of the data received from facebook
-      var request = https.get(options, function(result){
-        result.setEncoding('utf8');
-        result.on('data', function(chunk){
-          buffer += chunk;
-        });
-
-        result.on('end', function(){
-          var friendlist = JSON.parse(buffer);
-          friendlist = friendlist.data;
-
-          console.log("friendlist ", friendlist);
-
-          var contacts = [];
-          for (var i = 0; i < friendlist.length; i++) {
-            var tmp = {
-              provider: "facebook",
-              id: friendlist[i].id,
-              name: friendlist[i].name,
-              avatar: 'http://graph.facebook.com/' + friendlist[i].id + '/picture'
-            };
-            contacts.push(tmp);
+          if (accounts.length === 0) {
+            return res.json({"code":401,"message":"Not authorized"}, 401);
           }
-          done(contacts);
-        });
-      });
 
-      request.on('error', function(e){
-        console.log('error from getData: ' + e.message)
-      });
+          console.log("Social account linkage found");
 
-      request.end();
+          // retrieve accessToken from user
+          var accessToken = accounts[0].get("accessToken");
+          var apiPath = "/me/friends";
+
+          console.log(accessToken);
+
+          var options = {
+            host: 'graph.facebook.com',
+            port: 443,
+            path: apiPath + '?access_token=' + accessToken, //apiPath example: '/me/friends'
+            method: 'GET'
+          };
+
+          var buffer = ''; //this buffer will be populated with the chunks of the data received from facebook
+          var request = https.get(options, function(result){
+            result.setEncoding('utf8');
+            result.on('data', function(chunk){
+              buffer += chunk;
+            });
+
+            result.on('end', function(){
+              var friendList = JSON.parse(buffer);
+              friendList = friendList.data;
+
+              console.log("friendlist ", friendList);
+
+              var contacts = [];
+              for (var i = 0; i < friendList.length; i++) {
+                var tmp = {
+                  provider: "facebook",
+                  id: friendList[i].id,
+                  name: friendList[i].name,
+                  avatar: 'http://graph.facebook.com/' + friendList[i].id + '/picture'
+                };
+                contacts.push(tmp);
+              }
+              done(contacts);
+            });
+          });
+
+          request.on('error', function(e){
+            console.log('error from getData: ' + e.message)
+          });
+
+          request.end();
+        },
+        error: function(error) {
+          return res.json({
+            status: 401
+          }, 401);
+        }
+      });
     };
 
     user.importGoogleContacts = function(done) {
@@ -257,58 +266,76 @@ module.exports = {
 
       var self = this;
 
-      console.log("authData ", this.get("authData"));
+      var query = new Parse.Query("Account");
+      query.equalTo("provider", "google");
+      query.equalTo("user", this);
+      query.find({
+        success: function(accounts) {
 
-      var googlePlusAuthData = this.get("authData").anonymous;
-      if ((!googlePlusAuthData) || (googlePlusAuthData.provider !== "google")) {
-        return res.json({"code":401,"message":"Not authorized"}, 401);
-      }
-
-      // retrieve accessToken from user
-      var accessToken = googlePlusAuthData.access_token;
-      var apiPath = "/me/friends";
-
-      console.log(accessToken);
-
-      var options = {
-        host: 'graph.facebook.com',
-        port: 443,
-        path: apiPath + '?access_token=' + accessToken, //apiPath example: '/me/friends'
-        method: 'GET'
-      };
-
-      var buffer = ''; //this buffer will be populated with the chunks of the data received from facebook
-      var request = https.get(options, function(result){
-        result.setEncoding('utf8');
-        result.on('data', function(chunk){
-          buffer += chunk;
-        });
-
-        result.on('end', function(){
-          var friendlist = JSON.parse(buffer);
-          friendlist = friendlist.data;
-
-          console.log("friendlist ", friendlist);
-
-          var contacts = [];
-          for (var i = 0; i < friendlist.length; i++) {
-            var tmp = {
-              provider: "facebook",
-              id: friendlist[i].id,
-              name: friendlist[i].name,
-              avatar: 'http://graph.facebook.com/' + friendlist[i].id + '/picture'
-            };
-            contacts.push(tmp);
+          if (accounts.length === 0) {
+            return res.json({"code":401,"message":"Not authorized"}, 401);
           }
-          done(contacts);
-        });
-      });
 
-      request.on('error', function(e){
-        console.log('error from getData: ' + e.message)
-      });
+          console.log("Social account linkage found");
 
-      request.end();
+          // retrieve accessToken from user
+          var accessToken = accounts[0].get("accessToken");
+          var apiPath = "/plus/v1/people/me/people/visible";
+
+          console.log(accessToken);
+
+          var options = {
+            host: 'www.googleapis.com',
+            port: 443,
+//            path: apiPath + '?key=AIzaSyAqPnCk3pwWgHCZS2FrgZFFGvdWBRU7er4', //apiPath example: '/me/friends'
+            path: apiPath + '?access_token=' + accessToken,
+            method: 'GET'
+//            headers: {'Authorization':  'Bearer ' + accessToken}
+          };
+
+          var buffer = ''; //this buffer will be populated with the chunks of the data received from facebook
+          var request = https.get(options, function(result){
+//            console.log('HEADERS: ' + JSON.stringify(result.headers));
+            result.setEncoding('utf8');
+            result.on('data', function(chunk){
+              console.log('chunk - ', chunk);
+              buffer += chunk;
+            });
+
+            result.on('end', function(){
+              var friendList = JSON.parse(buffer);
+              friendList = friendList.items;
+
+              console.log("friendList ", friendList);
+
+              var contacts = [];
+              for (var i = 0; i < friendList.length; i++) {
+                if (friendList[i].objectType === "person") {
+                  var tmp = {
+                    provider: "google",
+                    id: friendList[i].id,
+                    name: friendList[i].displayName,
+                    avatar: friendList[i].image.url
+                  };
+                  contacts.push(tmp);
+                }
+              }
+              done(contacts);
+            });
+          });
+
+          request.on('error', function(e){
+            console.log('error from getData: ' + e.message)
+          });
+
+          request.end();
+        },
+        error: function(error) {
+          return res.json({
+            status: 401
+          }, 401);
+        }
+      });
     };
 
     user.initFirebaseRef(user.id, serverRootRef);

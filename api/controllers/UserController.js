@@ -37,11 +37,12 @@ module.exports = {
     var message = req.flash('error');
     console.log('login for message', message);
 
+    var facebookScope = encodeURIComponent('email');
     //var scope = encodeURIComponent('["https://www.googleapis.com/auth/plus.login", "https://www.googleapis.com/auth/userinfo.profile"]');
-    var scope = encodeURIComponent('profile email https://www.googleapis.com/auth/plus.login');
-    console.log(scope);
+    var googleScope = encodeURIComponent('profile email https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.me');
+    console.log(googleScope);
 
-    return res.view({ message : message, googlescope : scope });
+    return res.view({ message : message, facebookscope : facebookScope, googlescope : googleScope });
   },
 
   forgetPasswordForm : function(req, res, next) {

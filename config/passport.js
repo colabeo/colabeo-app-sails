@@ -265,7 +265,7 @@ passport.use(new GoogleStrategy({
   }))
 
 if ( hoststring.match("local") )  {
-  var GOOGLE_CONNECT_CLIENT_ID = '06625335434-009hdb2qpv8le0v2pn0kj631fjltnhkn.apps.googleusercontent.com';
+  var GOOGLE_CONNECT_CLIENT_ID = '406625335434-009hdb2qpv8le0v2pn0kj631fjltnhkn.apps.googleusercontent.com';
   var GOOGLE_CONNECT_CLIENT_SERECT = 'FIH9T8rkXagBW8_UWOen4csA';
 } //Development Facebook
 else {

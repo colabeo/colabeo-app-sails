@@ -178,6 +178,7 @@ module.exports = {
           console.log("a", a);
           console.log("b", b);
           console.log("after authorize", req.user);
+//          return res.json({ status : provider + " connected" });
           return res.redirect('/');
         }
     )(req, res, next);

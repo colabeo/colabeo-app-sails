@@ -194,34 +194,41 @@ passport.use("facebook-connect", new FacebookStrategy({
 
     console.log("facebook-connect - ", req);
     console.log("req.user - ", req.user);
-    var authData = req.user.get('authData') || {};
-    var rootData = authData["anonymous"] = authData["anonymous"] || {};
-    rootData["facebook"] = fbAuthData;
-    //req.user.set("authData", authData);
-    console.log("authData", authData);
 
-    req.user.save(null, {
-      success: function(user) {
-        console.log("link with provider - success");
+    // Create social account linkage
 
-        // Create social account linkage
-        var Account = Parse.Object.extend("Account");
-        var account = new Account();
-        account.set("provider", "facebook");
-        account.set("externalId", fbAuthData.id);
-        account.set("accessToken", fbAuthData.access_token);
-        account.set("user", user);
-        account.save();
-
-        console.log("lookup entry created - success");
-        return done(null, user);
+    var query = new Parse.Query("Account");
+    query.equalTo("user", req.user);
+    query.equalTo("provider", "facebook");
+    query.equalTo("externalId", profile._json.id);
+    query.find({
+      success: function(accounts) {
+        if (accounts.length === 0) {
+          console.log("No social account linkage found ");
+          // Create social account linkage
+          var Account = Parse.Object.extend("Account");
+          var account = new Account();
+          account.set("provider", "facebook");
+          account.set("externalId", profile._json.id);
+          account.set("accessToken", facebookAccessToken);
+          account.set("user", req.user);
+          account.save();
+          return done(null, req.user);
+        }
+        else {
+          console.log("Social account linkage found");
+          // Update the accessToken
+          var account = accounts[0];
+          account.set("accessToken", facebookAccessToken);
+          account.save();
+          return done(null, req.user);
+        }
       },
-      error: function(user, error) {
-        console.log("save authData error", error);
-        return done(error, user);
+      error: function(error) {
+        console.log("Find account error?", error);
+        return done(null, req.user);
       }
     });
-
   }
 ));
 
@@ -255,6 +262,56 @@ passport.use(new GoogleStrategy({
     socialAccountAuthenticationHandler(req, user, accessToken, "google", profile._json.id, done);
 
   }))
+
+passport.use("google-connect", new FacebookStrategy({
+    clientID: GOOGLEPLUS_CLIENT_ID,
+    clientSecret: GOOGLEPLUS_CLIENT_SECRET,
+    callbackURL: HOST_SERVER_URL + "/connect/google/callback",
+    passReqToCallback: true
+  },
+  function (req, accessToken, refreshToken, profile, done) {
+
+    console.log("profile", profile);
+    //TODO: change the expiration date
+
+    console.log("google-connect - ", req);
+    console.log("req.user - ", req.user);
+
+    var query = new Parse.Query("Account");
+    query.equalTo("user", req.user);
+    query.equalTo("provider", "google");
+    query.equalTo("externalId", profile._json.id);
+    query.find({
+      success: function(accounts) {
+        if (accounts.length === 0) {
+          console.log("No social account linkage found ");
+          // Create social account linkage
+          var Account = Parse.Object.extend("Account");
+          var account = new Account();
+          account.set("provider", "google");
+          account.set("externalId", profile._json.id);
+          account.set("accessToken", accessToken);
+          account.set("user", req.user);
+          account.save();
+          return done(null, req.user);
+        }
+        else {
+          console.log("Social account linkage found");
+          // Update the accessToken
+          var account = accounts[0];
+          account.set("accessToken", accessToken);
+          account.save();
+          return done(null, req.user);
+        }
+      },
+      error: function(error) {
+        console.log("Find account error?", error);
+        return done(null, req.user);
+      }
+    });
+
+  }
+));
 
 module.exports = {
 

@@ -8,19 +8,21 @@ var passport    = require('passport'),
 
 // setup req.session.passport.user
 passport.serializeUser(function (user, done) {
-  console.log("serializeUser");
+  console.log("serializeUser - ", user.id);
   done(null, user.id);
 });
 
 // repopulate req.user
 passport.deserializeUser(function (userId, done) {
-  console.log("deserializeUser");
+  console.log("deserializeUser - ", userId);
   var query = new Parse.Query(Parse.User);
   query.get(userId, {
     success: function(user) {
+      console.log("success");
       done(null, user);
     },
     error: function(object, error) {
+      console.log(error.message);
       done(null, false, error.message);
     }
   });
@@ -263,7 +265,7 @@ passport.use(new GoogleStrategy({
 
   }))
 
-passport.use("google-connect", new FacebookStrategy({
+passport.use("google-connect", new GoogleStrategy({
     clientID: GOOGLEPLUS_CLIENT_ID,
     clientSecret: GOOGLEPLUS_CLIENT_SECRET,
     callbackURL: HOST_SERVER_URL + "/connect/google/callback",

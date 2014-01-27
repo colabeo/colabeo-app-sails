@@ -231,6 +231,10 @@ module.exports = {
 
               console.log("friendlist ", friendList);
 
+              if (!friendList) {
+                done([]);
+              }
+
               var contacts = [];
               for (var i = 0; i < friendList.length; i++) {
                 var tmp = {
@@ -305,6 +309,10 @@ module.exports = {
               friendList = friendList.items;
 
               console.log("friendList ", friendList);
+
+              if (!friendList) {
+                done([]);
+              }
 
               var contacts = [];
               for (var i = 0; i < friendList.length; i++) {

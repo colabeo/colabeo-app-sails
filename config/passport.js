@@ -56,21 +56,14 @@ passport.use(new LocalStrategy({
 ));
 
 // TODO: Put these into the config file
-var os = require("os");
-var hoststring = os.hostname();
 
-if ( hoststring.match("local") )  {
-    var FACEBOOK_APP_ID = '1428317197384013';
-    var FACEBOOK_APP_SECRET = 'd03fd6db99a7b1c5dd0d82b6d61126ca';
-    var HOST_SERVER_URL = 'http://localhost:1337';
-} //Development Facebook
-else {
-    var FACEBOOK_APP_ID = '686271008083898';
-    var FACEBOOK_APP_SECRET = '6cbe30c8c9655e28f3a148876a819565';
-    var HOST_SERVER_URL = 'https://dashboard.colabeo.com';
-} //Production Facebook
+var sails = require("sails");
 
-console.log("FACEBOOK ID + SECRET " + FACEBOOK_APP_ID + ", " + FACEBOOK_APP_SECRET );
+var FACEBOOK_APP_ID = sails.FACEBOOK_APP_ID;
+var FACEBOOK_APP_SECRET = sails.FACEBOOK_APP_SECRET;
+var HOST_SERVER_URL = sails.HOST_SERVER_URL;
+
+console.log("FACEBOOK ID + SECRET " + FACEBOOK_APP_ID + ", " + FACEBOOK_APP_SECRET);
 
 var socialAccountAuthenticationHandler = function (req, user, accessToken, provider, externalId, done) {
   process.nextTick(function () {
@@ -233,10 +226,8 @@ passport.use("facebook-connect", new FacebookStrategy({
   }
 ));
 
-var GOOGLEPLUS_CLIENT_ID = '526862954475.apps.googleusercontent.com';
-var GOOGLEPLUS_CLIENT_SECRET = 'r0wARG9mQuJxYFPGmYIzoYLH';
-//var GOOGLEPLUS_CLIENT_ID = '406625335434.apps.googleusercontent.com';
-//var GOOGLEPLUS_CLIENT_SECRET = 'AIzaSyAqPnCk3pwWgHCZS2FrgZFFGvdWBRU7er4';
+var GOOGLEPLUS_CLIENT_ID = sails.GOOGLEPLUS_CLIENT_ID;
+var GOOGLEPLUS_CLIENT_SECRET = sails.GOOGLEPLUS_CLIENT_SECRET;
 
 passport.use(new GoogleStrategy({
     clientID: GOOGLEPLUS_CLIENT_ID,
@@ -264,18 +255,12 @@ passport.use(new GoogleStrategy({
 
   }))
 
-if ( hoststring.match("local") )  {
-  var GOOGLE_CONNECT_CLIENT_ID = '406625335434-009hdb2qpv8le0v2pn0kj631fjltnhkn.apps.googleusercontent.com';
-  var GOOGLE_CONNECT_CLIENT_SERECT = 'FIH9T8rkXagBW8_UWOen4csA';
-} //Development Facebook
-else {
-  var GOOGLE_CONNECT_CLIENT_ID = '';
-  var GOOGLE_CONNECT_CLIENT_SERECT = '';
-} //Production Facebook
+  var GOOGLE_CONNECT_CLIENT_ID = sails.GOOGLE_CONNECT_CLIENT_ID;
+  var GOOGLE_CONNECT_CLIENT_SECRET = sails.GOOGLE_CONNECT_CLIENT_SECRET;
 
 passport.use("google-connect", new GoogleStrategy({
     clientID: GOOGLE_CONNECT_CLIENT_ID,
-    clientSecret: GOOGLE_CONNECT_CLIENT_SERECT,
+    clientSecret: GOOGLE_CONNECT_CLIENT_SECRET,
     callbackURL: HOST_SERVER_URL + "/connect/google/callback",
     passReqToCallback: true
   },

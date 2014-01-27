@@ -1,3 +1,21 @@
+# Development Setup
+git clone git@github.com:colabeo/colabeo-app-sails.git
+
+git clone git@github.com:colabeo/colabeo-client.git
+
+cd colabeo-app-sails
+
+sudo npm install
+
+cd assets
+
+ln -s ../../colabeo-client famous-time
+
+cd ../../colabeo-client
+
+bower install
+
+
 # colabeo-app-sails
 ### a Sails application
 

@@ -20,11 +20,12 @@
     "connect-flash": "~0.1.1",
     "firebase": "~0.6.22",
     "firebase-token-generator": "~0.1.4",
-    "btoa": "~1.1.1"
+    "btoa": "~1.1.1",
+    "node-gyp": "~0.12.2"
   },
   "scripts": {
-      "start": "node app.js",
-      "debug": "node debug app.js"
+    "start": "node app.js",
+    "debug": "node debug app.js"
   },
   "main": "app.js",
   "repository": "",

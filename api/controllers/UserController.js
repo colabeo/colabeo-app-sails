@@ -1,7 +1,6 @@
+var sails = require('sails');
 var passport = require('passport');
 var Parse = require('parse').Parse;
-
-COOKIE_LIFECYCLE =  30 * 24 * 60 * 60 * 1000;   //1-month
 
 /**
  * UserController
@@ -115,7 +114,7 @@ module.exports = {
 //        console.log("user ", user);
 //        console.log("RememberMe ", req.body.RememberMe);
 //        if ((user) && (req.body.RememberMe)) {
-//          res.cookie('_sessionToken', user._sessionToken, {expires: new Date(Date.now() + COOKIE_LIFECYCLE), httpOnly: true});
+//          res.cookie('_sessionToken', user._sessionToken, {expires: new Date(Date.now() + sails.COOKIE_LIFECYCLE), httpOnly: true});
 //        }
 //        return res.redirect('/');
 //      })

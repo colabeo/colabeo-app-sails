@@ -5,7 +5,9 @@ var os = require("os");
 var hoststring = os.hostname();
 
 var DEVELOPMENT=hoststring.match("local"); // Dev Flag
+//DEVELOPMENT=1;  // for Windows
 
+sails.DEVELOPMENT=DEVELOPMENT;
 // Default Password for all social networks
 sails.DEFAULT_PASSWORD='abcd1234';
 // Cookie life-cycle
@@ -19,7 +21,7 @@ sails.PARSE_MASTER_KEY = "a9M6qBsVNJU1Zap2eumLVKV09fB94aY9K4ZXdHe1";
 if (DEVELOPMENT)  {
     console.log("************** Development *****************");
     // Facebook App Credentials
-    sails.FACEBOOK_APP_ID = '1428317197384013XZ';
+    sails.FACEBOOK_APP_ID = '1428317197384013';
     sails.FACEBOOK_APP_SECRET = 'd03fd6db99a7b1c5dd0d82b6d61126ca';
     sails.HOST_SERVER_URL = 'http://localhost:1337';
 

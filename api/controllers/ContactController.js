@@ -231,7 +231,7 @@ module.exports = {
 
               console.log("friendlist ", friendList);
 
-              if (!friendList) {
+              if (friendList === "undefined") {
                 done([]);
               }
 
@@ -310,7 +310,7 @@ module.exports = {
 
               console.log("friendList ", friendList);
 
-              if (!friendList) {
+              if (friendList === "undefined") {
                 done([]);
               }
 

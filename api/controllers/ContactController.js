@@ -230,20 +230,18 @@ module.exports = {
               friendList = friendList.data;
 
               console.log("friendlist ", friendList);
-
-              if (friendList === "undefined") {
-                done([]);
-              }
-
               var contacts = [];
-              for (var i = 0; i < friendList.length; i++) {
-                var tmp = {
-                  provider: "facebook",
-                  id: friendList[i].id,
-                  name: friendList[i].name,
-                  avatar: 'http://graph.facebook.com/' + friendList[i].id + '/picture'
-                };
-                contacts.push(tmp);
+              
+              if (friendList ) {
+                for (var i = 0; i < friendList.length; i++) {
+                  var tmp = {
+                    provider: "facebook",
+                    id: friendList[i].id,
+                    name: friendList[i].name,
+                    avatar: 'http://graph.facebook.com/' + friendList[i].id + '/picture'
+                  };
+                  contacts.push(tmp);
+                }
               }
               done(contacts);
             });
@@ -310,20 +308,18 @@ module.exports = {
 
               console.log("friendList ", friendList);
 
-              if (friendList === "undefined") {
-                done([]);
-              }
-
               var contacts = [];
-              for (var i = 0; i < friendList.length; i++) {
-                if (friendList[i].objectType === "person") {
-                  var tmp = {
-                    provider: "google",
-                    id: friendList[i].id,
-                    name: friendList[i].displayName,
-                    avatar: friendList[i].image.url
-                  };
-                  contacts.push(tmp);
+              if (friendList) {
+                for (var i = 0; i < friendList.length; i++) {
+                  if (friendList[i].objectType === "person") {
+                    var tmp = {
+                      provider: "google",
+                      id: friendList[i].id,
+                      name: friendList[i].displayName,
+                      avatar: friendList[i].image.url
+                    };
+                    contacts.push(tmp);
+                  }
                 }
               }
               done(contacts);

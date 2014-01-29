@@ -44,14 +44,13 @@ else {
     sails.HOST_SERVER_URL = 'https://dashboard.colabeo.com';
 
     // Firebase App Credentials
+    // TODO: firebase prod settings
     sails.FIREBASE_URL='https://koalalab-berry.firebaseio.com/';
     sails.YOUR_FIREBASE_SECRET = 'EyziaFZwrpPxf8GoUOPsci9u6DCZhVzRhCjJX9VZ';
 
     // Google+ App Credentials
-    sails.GOOGLEPLUS_CLIENT_ID = '526862954475.apps.googleusercontent.com';
-    sails.GOOGLEPLUS_CLIENT_SECRET = 'r0wARG9mQuJxYFPGmYIzoYLH';
-    //sails.GOOGLEPLUS_CLIENT_ID = '406625335434.apps.googleusercontent.com';
-    //sails.GOOGLEPLUS_CLIENT_SECRET = 'AIzaSyAqPnCk3pwWgHCZS2FrgZFFGvdWBRU7er4';
+    sails.GOOGLEPLUS_CLIENT_ID = '406625335434.apps.googleusercontent.com';
+    sails.GOOGLEPLUS_CLIENT_SECRET = 'AIzaSyAqPnCk3pwWgHCZS2FrgZFFGvdWBRU7er4';
 
     // Google Connect Credentials
     sails.GOOGLE_CONNECT_CLIENT_ID = '406625335434-009hdb2qpv8le0v2pn0kj631fjltnhkn.apps.googleusercontent.com';

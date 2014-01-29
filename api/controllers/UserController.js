@@ -48,80 +48,6 @@ module.exports = {
     return res.view();
   },
 
-//  signUp : function(req, res, next) {
-//
-//    var user = new Parse.User();
-//    user.set("lastname", req.param('lastname'));
-//    user.set("firstname", req.param('firstname'));
-//    user.set("username", req.param('email'));
-//    user.set("password", req.param('password'));
-//    user.set("email", req.param('email'));
-//
-//    user.signUp(null, {
-//      success: function(user) {
-//        console.log("Sign up - success");
-//        res.redirect('/');
-//      },
-//      error: function(user, error) {
-//        // Show the error message somewhere and let the user try again.
-//        // alert("Error: " + error.code + " " + error.message);
-//        req.flash('error', error.message);
-//        res.redirect('/register');
-//      }
-//    });
-//
-//  },
-//
-//  signUpWithFacebook : function(req, res, next) {
-//
-//  },
-//
-//  forgetPassword : function(req, res, next) {
-//    console.log("forget Password calling " + req.param('email'));
-//
-//    Parse.User.requestPasswordReset(req.param("email"), {
-//      success: function() {
-//        // Password reset request was sent successfully
-//        res.redirect('/');
-//      },
-//      error: function(error) {
-//        // Show the error message somewhere
-//        // alert("Error: " + error.code + " " + error.message);
-//      }
-//    });
-//  },
-//
-//  login : function(req, res, next) {
-//
-//    passport.authenticate('local', {
-////            successRedirect: '/',
-////            failureRedirect: this.urlFor({ action: 'login' }),
-//        failureFlash: true
-//      }, function(err, user, info) {
-//      console.log("after login ", user);
-//      console.log("req.isAuthenticated() ", req.isAuthenticated());
-////      console.log("next ", next);
-//      console.log("err ", err);
-//      console.log("info ", info);
-//
-//      req.flash('error', info);
-//
-//        if (err) { return next(err); }
-//      if (!user) { return res.redirect('/login'); }
-//
-//      req.logIn(user, function(err) {
-//        if (err) { return next(err); }
-//        console.log("user ", user);
-//        console.log("RememberMe ", req.body.RememberMe);
-//        if ((user) && (req.body.RememberMe)) {
-//          res.cookie('_sessionToken', user._sessionToken, {expires: new Date(Date.now() + sails.COOKIE_LIFECYCLE), httpOnly: true});
-//        }
-//        return res.redirect('/');
-//      })
-//    }
-//    )(req, res, next);
-//  },
-
   me : function(req, res) {
 
     if (req.isAuthenticated()) {
@@ -212,17 +138,22 @@ module.exports = {
             findUsersByEmailsQuery._orQuery(emailQueries);
             findUsersByEmailsQuery.find({
               success: function(users) {
+                
                 console.log("users", users[0]);
 
-                var result = {
-                  "provider": "email",
-                  "externalId": users[0].get("email"),
-                  "objectId": users[0].id
+                if (users[0]) {
+                  
+                  var result = {
+                    "provider": "email",
+                    "externalId": users[0].get("email"),
+                    "objectId": users[0].id
+                  }
+  
+                  callee.push(result);
+                  console.log("result after consolidation 1 ", result);
+                  console.log("result after consolidation 2 ", callee);
                 }
-
-                callee.push(result);
-                console.log("result after consolidation 1 ", result);
-                console.log("result after consolidation 2 ", callee);
+                
                 return res.json(callee);
               },
               error: function(error) {
@@ -240,13 +171,17 @@ module.exports = {
         success: function(users) {
           console.log("users", users[0]);
 
-          var result = {
-            "provider": "email",
-            "externalId": users[0].get("email"),
-            "objectId": users[0].id
-          };
-
-          return res.json([result]);
+          if (users[0]) {
+            var result = {
+              "provider": "email",
+              "externalId": users[0].get("email"),
+              "objectId": users[0].id
+            };
+  
+            return res.json([result]);
+          } else {
+            return res.json([]);
+          }
         },
         error: function(error) {
           return res.json({ error : error });

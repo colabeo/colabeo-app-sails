@@ -53,6 +53,10 @@ else {
     sails.GOOGLEPLUS_CLIENT_SECRET = 'AIzaSyAqPnCk3pwWgHCZS2FrgZFFGvdWBRU7er4';
 
     // Google Connect Credentials
+    sails.GOOGLE_AUTH_CLIENT_ID = '406625335434-vbasn2sli23cdc6i7a11jmr5jsssvhli.apps.googleusercontent.com';
+    sails.GOOGLE_AUTH_CLIENT_SECRET = 'jV_U69TUDX8s11MUSw_n33l2';
+    
+    // Google Connect Credentials
     sails.GOOGLE_CONNECT_CLIENT_ID = '406625335434-ha4e3gu85k88jdgtihrrvml8em73ndee.apps.googleusercontent.com';
     sails.GOOGLE_CONNECT_CLIENT_SECRET = 'EulvcCWybpQHWwJEKB6Fla1d';
 

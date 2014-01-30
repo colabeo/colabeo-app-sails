@@ -232,8 +232,8 @@ var GOOGLE_AUTH_CLIENT_ID = sails.GOOGLE_AUTH_CLIENT_ID;
 var GOOGLE_AUTH_CLIENT_SECRET = sails.GOOGLE_AUTH_CLIENT_SECRET;
 
 passport.use(new GoogleStrategy({
-        clientID: sails.GOOGLE_AUTH_CLIENT_ID,
-        clientSecret: sails.GOOGLE_AUTH_CLIENT_ID,
+        clientID: GOOGLE_AUTH_CLIENT_ID,
+        clientSecret: GOOGLE_AUTH_CLIENT_SECRET,
         callbackURL: HOST_SERVER_URL + "/auth/google/callback",
         passReqToCallback: true
     },

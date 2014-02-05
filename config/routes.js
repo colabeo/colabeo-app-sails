@@ -74,6 +74,11 @@ module.exports.routes = {
     action: 'forgetPasswordForm'
   },
 
+  'get /usermanagement': {
+    controller: 'user',
+    action: 'userManagement'
+  },
+
   'get /login': {
     controller: 'user',
     action: 'loginForm'

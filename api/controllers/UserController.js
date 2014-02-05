@@ -48,6 +48,10 @@ module.exports = {
     return res.view();
   },
 
+  userManagement : function(req, res, next) {
+    return res.view();
+  },
+
   me : function(req, res) {
 
     if (req.isAuthenticated()) {

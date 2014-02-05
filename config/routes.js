@@ -79,6 +79,21 @@ module.exports.routes = {
     action: 'userManagement'
   },
 
+  'get /choosepassword': {
+    controller: 'user',
+    action: 'choosePassword'
+  },
+
+  'get /emailverification': {
+      controller: 'user',
+      action: 'emailVerification'
+  },
+
+  'get /passwordupdated': {
+      controller: 'user',
+      action: 'passwordUpdated'
+  },
+
   'get /login': {
     controller: 'user',
     action: 'loginForm'

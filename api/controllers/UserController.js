@@ -52,6 +52,18 @@ module.exports = {
     return res.view();
   },
 
+  choosePassword : function(req, res, next) {
+    return res.view();
+  },
+
+  emailVerification : function(req, res, next) {
+    return res.view();
+  },
+
+  passwordUpdated : function(req, res, next) {
+    return res.view();
+  },
+
   me : function(req, res) {
 
     if (req.isAuthenticated()) {

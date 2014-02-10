@@ -1,0 +1,76 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Beepe</title>
+
+    <!-- General setup -->
+    <meta name="viewport" content="user-scalable=0, initial-scale=1.0, width=device-width" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="format-detection" content="email=no" />
+    <meta http-equiv="x-rim-auto-match" content="none">
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
+    <!-- iOS Icons -->
+    <link rel="apple-touch-icon" href="famous-portal/content/ios_icon_x57.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="famous-portal/content/ios_icon_x72.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="famous-portal/content/ios_icon_x144.png" />
+
+    <!--Splash screens -->
+    <link href="famous-portal/content/apple-touch-startup-image-iphone.png" media="(device-width: 320px)" rel="apple-touch-startup-image">
+    <link href="famous-portal/content/apple-touch-startup-image-iphone-retina.png" media="(device-width: 320px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
+    <link href="famous-portal/content/apple-touch-startup-image-ipad-portrait.png" media="(device-width: 768px) and (orientation: portrait)" rel="apple-touch-startup-image">
+    <link href="famous-portal/content/apple-touch-startup-image-ipad-landscape.png" media="(device-width: 768px) and (orientation: landscape)" rel="apple-touch-startup-image">
+    <link href="famous-portal/content/apple-touch-startup-image-ipad-portrait-retina.png" media="(device-width: 1536px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
+    <link href="famous-portal/content/apple-touch-startup-image-ipad-landscape-retina.png" media="(device-width: 1536px)  and (orientation: landscape) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image">
+    <link rel="apple-touch-startup-image" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)" href="famous-portal/content/apple-touch-startup-image-iphone-retina-568h@2x.png">
+
+    <!-- Load CSS -->
+    <!--<link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" />-->
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="famous-portal/css/famous.css" />
+    <link rel="stylesheet" type="text/css" href="famous-portal/css/fonts.css" />
+    <link rel="stylesheet" type="text/css" href="famous-portal/css/app.css" />
+
+    <!-- start: Chrome Web Store -->
+    <link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/eccfcbafhnpojpjhdhlkoikpnbofhljf">
+    <!-- end: Chrome Web Store -->
+
+    <link href='http://fonts.googleapis.com/css?family=Oleo+Script' rel='stylesheet' type='text/css'>
+    <link rel="shortcut icon" type="image/png" href="famous-portal/pics/favicon.ico"/>
+
+    <script type="text/javascript" src="famous-portal/js/lib/functionPrototypeBind.js"></script>
+    <script type="text/javascript" src="famous-portal/js/lib/classList.js"></script>
+    <script type="text/javascript" src="famous-portal/js/lib/requestAnimationFrame.js"></script>
+    <script type="text/javascript" src="famous-portal/js/lib/zepto.min.js"></script>
+
+    <script type="text/javascript" src="famous-portal/bower_components/underscore/underscore-min.js"></script>
+    <script type="text/javascript" src="famous-portal/bower_components/backbone/backbone-min.js"></script>
+    <script type="text/javascript" src="famous-portal/bower_components/handlebars/handlebars.runtime.min.js"></script>
+    <script type="text/javascript" src="famous-portal/bower_components/backbone/examples/backbone.localStorage.js"></script>
+
+    <script type="text/javascript" src="famous-portal/js/lib/firebase.js"></script>
+    <script type="text/javascript" src="famous-portal/js/lib/backboneFirebase.js"></script>
+    <script type="text/javascript" src="famous-portal/js/lib/peer.min.js"></script>
+    <script type="text/javascript" src="famous-portal/js/lib/require.js" data-main="js/app"></script>
+
+    <!-- start: Zopim Code for Chat -->
+    <script type="text/javascript">
+        window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=
+                d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set.
+                _.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute('charset','utf-8');
+            $.src='//v2.zopim.com/?1qqvmve72sJsD78pCRHkIkd0gGD93w4D';z.t=+new Date;$.
+                    type='text/javascript';e.parentNode.insertBefore($,e)})(document,'script');
+    </script>
+    <!-- end: Zopim Code for Chat-->
+</head>
+<body>
+    <img src="famous-portal/pics/colabeoBackground.jpg" class="colabeo-background"/>
+    <iframe src="http://localhost:1337" class="iframe-colabeo-dashboard"></iframe>
+    <div id="splash-container">
+        <p class="title">Beepe</p>
+        <p class="subtitle">in Touch with the world</p>
+    </div>
+</body>
+</html>

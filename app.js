@@ -45,7 +45,7 @@ else {
     console.log("************** Production *****************");
     sails.FACEBOOK_APP_ID = '686271008083898';
     sails.FACEBOOK_APP_SECRET = '6cbe30c8c9655e28f3a148876a819565';
-    sails.HOST_SERVER_URL = 'https://dashboard.colabeo.com';
+    sails.HOST_SERVER_URL = 'https://beepe.me';
 
     // Firebase App Credentials
     // TODO: firebase prod settings

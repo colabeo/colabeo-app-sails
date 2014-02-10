@@ -21,7 +21,7 @@ module.exports = {
   /**
    * Action blueprints:
    *    `/home/index`
-   *    `/home`
+   *    `/home` Original
    */
    index: function (req, res) {
     

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Colabeo Login Form</title>
+    <title>Beepe Sign in</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -23,25 +23,30 @@
 
     <!-- Google Web Fonts -->
     <link href='//fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Oleo+Script' rel='stylesheet' type='text/css'>
 </head>
-<body style="background-color: grey">
-<br />
-<br />
-<br />
-<div class="container eternity-form dark">
+<body>
+<div class="title">
+Beepe
+</div>
+<div class="container eternity-form">
     <div class="login-form-section">
+
         <% if ((message) && (message != "")) { %>
         <div class="login-form-links link2 animated bounceIn" style="">
             <span><%=message%></span>
         </div>
         <% } %>
 
-        <div class="login-content animated bounceIn">
+        <div class="facebook sign-in animated fadeInLeftBig">
+            <a href="auth/facebook/<%=facebookscope%>">Sign in with Facebook</a>
+        </div>
+        <div class="google sign-in animated fadeInRightBig">
+            <a href="auth/google/<%=googlescope%>">Sign in with Google+</a>
+        </div>
+        <div class="or animated bounceIn">or</div>
+        <div class="login-form-links animated bounceIn">
             <form method="POST" action="/login">
-                <div class="section-title">
-                    <img data-0="width:24px;" style="width: 50px; float: left; margin: 10px;" src="images/colabeo128.png" alt="">
-                    <h3>LogIn to your Account</h3>
-                </div>
                 <div class="textbox-wrap">
                     <div class="input-group">
                         <span class="input-group-addon "><i class="icon-user icon-color"></i></span>
@@ -55,40 +60,20 @@
                     </div>
                 </div>
                 <div class="login-form-action clearfix">
-                    <div class="checkbox pull-left">
-                        <div class="custom-checkbox">
-                            <input class="iCheck" type="checkbox" name="RememberMe">
-                        </div>
-                        <span class="checkbox-text pull-left">&nbsp;Remember Me</span>
-                    </div>
-                    <button type="submit" class="btn btn-success pull-right green-btn">LogIn &nbsp; <i class="icon-chevron-right"></i></button>
+                    <!--<div class="checkbox pull-left">-->
+                        <!--<div class="custom-checkbox">-->
+                            <!--<input class="iCheck" type="checkbox" name="RememberMe">-->
+                        <!--</div>-->
+                        <!--<span class="checkbox-text pull-left">&nbsp;Remember Me</span>-->
+                    <!--</div>-->
+                    <a href="forgetpassword" class="beepe-blue">Forgot your password?</a>
+                    <button type="submit" class="btn pull-right beepe">Sign in</button>
                 </div>
             </form>
         </div>
-        <div class="login-form-links link1 animated bounceIn">
-            <h4 class="blue">Sign in with Facebook?</h4>
-            <span></span>
-            <a href="auth/facebook/<%=facebookscope%>" class="blue">Click Here</a>
-            <span>to Sign In</span>
-        </div>
-        <div class="login-form-links link1 animated bounceIn">
-            <h4 class="green">Sign in with Google+?</h4>
-            <span></span>
-            <a href="auth/google/<%=googlescope%>" class="green">Click Here</a>
-            <span>to Sign In</span>
-        </div>
-
-        <div class="login-form-links link1 animated fadeInLeftBig">
-            <h4 class="blue">Don't have an Account?</h4>
-            <span>No worry</span>
-            <a href="register" class="blue">Click Here</a>
-            <span>to Register</span>
-        </div>
-        <div class="login-form-links link2 animated fadeInRightBig">
-            <h4 class="green">Forget your Password?</h4>
-            <span>Dont worry</span>
-            <a href="forgetpassword" class="green">Click Here</a>
-            <span>to Get New One</span>
+        <br>
+        <div class="beepe sign-in animated bounceIn">
+            <a href="register">Sign up</a>
         </div>
     </div>
 </div>

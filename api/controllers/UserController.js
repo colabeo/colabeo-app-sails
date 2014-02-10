@@ -48,6 +48,22 @@ module.exports = {
     return res.view();
   },
 
+  userManagement : function(req, res, next) {
+    return res.view();
+  },
+
+  choosePassword : function(req, res, next) {
+    return res.view();
+  },
+
+  emailVerification : function(req, res, next) {
+    return res.view();
+  },
+
+  passwordUpdated : function(req, res, next) {
+    return res.view();
+  },
+
   me : function(req, res) {
 
     if (req.isAuthenticated()) {
@@ -216,5 +232,24 @@ module.exports = {
         return res.json(error);
       }
     });
+  },
+
+  createDisposableChatRoom : function(req, res) {
+    var callee = req.param('callee') ? JSON.parse(decodeURIComponent(req.param('callee'))) : null;
+    if (callee) {
+      var Chatroom = Parse.Object.extend("Chatroom");
+      var chatroom = new Chatroom();
+      chatroom.set("caller", req.user.id);
+      chatroom.set("calleeAccountProvider", callee.provider);
+      chatroom.set("calleeAccountId", callee.eid);
+      chatroom.save();
+      return res.json({ status : "successful"});
+    } else {
+      return res.json({ error : "callee is missing"});
+    }
+  },
+
+  enterDisposableChatRoom : function(req, res) {
+
   }
 };

@@ -232,7 +232,7 @@ module.exports = {
               console.log("friendlist ", friendList);
               var contacts = [];
               
-              if (friendList ) {
+              if (friendList) {
                 for (var i = 0; i < friendList.length; i++) {
                   var tmp = {
                     provider: "facebook",
@@ -303,8 +303,14 @@ module.exports = {
             });
 
             result.on('end', function(){
-              var friendList = JSON.parse(buffer);
-              friendList = friendList.items;
+
+              var result = JSON.parse(buffer);
+
+              if (result.error) {
+                done(result);
+              }
+
+              var friendList = result.items;
 
               console.log("friendList ", friendList);
 

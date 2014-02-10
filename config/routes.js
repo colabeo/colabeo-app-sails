@@ -64,6 +64,16 @@ module.exports.routes = {
     action: 'findUsersByExternalAccounts'
   },
 
+  'post /chatroom' : {
+    controller: 'user',
+    action: 'createDisposableChatRoom'
+  },
+
+  'get /chatroom' : {
+    controller: 'user',
+    action: 'enterDisposableChatRoom'
+  },
+
   'get /register': {
     controller: 'user',
     action: 'registrationForm'

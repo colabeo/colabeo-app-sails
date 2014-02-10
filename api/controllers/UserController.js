@@ -64,6 +64,11 @@ module.exports = {
     return res.view();
   },
 
+  famousPortal : function(req, res, next) {
+    return res.view('user/famous_portal');
+    //return res.view();
+  },
+
   me : function(req, res) {
 
     if (req.isAuthenticated()) {

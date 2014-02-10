@@ -23,15 +23,13 @@ module.exports = {
    *    `/home/index`
    *    `/home`
    */
-  index: function (req, res) {
+   index: function (req, res) {
     
     // Send a JSON response
-    return res.view('home/famous_portal');
-  },
-
-  phone: function (req, res)  {
     return res.view('home/famous_time');
   },
+
+
 
 
   /**

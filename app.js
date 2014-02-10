@@ -33,6 +33,10 @@ if (DEVELOPMENT)  {
     sails.GOOGLEPLUS_CLIENT_ID = '526862954475.apps.googleusercontent.com';
     sails.GOOGLEPLUS_CLIENT_SECRET = 'r0wARG9mQuJxYFPGmYIzoYLH';
 
+    // Google Auth Credentials
+    sails.GOOGLE_AUTH_CLIENT_ID = '406625335434-2nur016vm6srttpmtle8767goucs571d.apps.googleusercontent.com';
+    sails.GOOGLE_AUTH_CLIENT_SECRET = '1AJzbnUsKlKZT04LoPqVR9IH';
+    
     // Google Connect Credentials
     sails.GOOGLE_CONNECT_CLIENT_ID = '406625335434-009hdb2qpv8le0v2pn0kj631fjltnhkn.apps.googleusercontent.com';
     sails.GOOGLE_CONNECT_CLIENT_SECRET = 'FIH9T8rkXagBW8_UWOen4csA';
@@ -41,7 +45,7 @@ else {
     console.log("************** Production *****************");
     sails.FACEBOOK_APP_ID = '686271008083898';
     sails.FACEBOOK_APP_SECRET = '6cbe30c8c9655e28f3a148876a819565';
-    sails.HOST_SERVER_URL = 'https://dashboard.colabeo.com';
+    sails.HOST_SERVER_URL = 'https://beepe.me';
 
     // Firebase App Credentials
     // TODO: firebase prod settings
@@ -52,9 +56,13 @@ else {
     sails.GOOGLEPLUS_CLIENT_ID = '406625335434.apps.googleusercontent.com';
     sails.GOOGLEPLUS_CLIENT_SECRET = 'AIzaSyAqPnCk3pwWgHCZS2FrgZFFGvdWBRU7er4';
 
+    // Google Auth Credentials
+    sails.GOOGLE_AUTH_CLIENT_ID = '575666662072-u62f6q9869q5sh0q8c8jc3r34soiacif.apps.googleusercontent.com';
+    sails.GOOGLE_AUTH_CLIENT_SECRET = 'a3HvIj5yzo9aTqLKNLeELSn4';
+    
     // Google Connect Credentials
-    sails.GOOGLE_CONNECT_CLIENT_ID = '406625335434-ha4e3gu85k88jdgtihrrvml8em73ndee.apps.googleusercontent.com';
-    sails.GOOGLE_CONNECT_CLIENT_SECRET = 'EulvcCWybpQHWwJEKB6Fla1d';
+    sails.GOOGLE_CONNECT_CLIENT_ID = '575666662072-mfpa2ci9me3lr0vpkvoqu2n2lin4urpn.apps.googleusercontent.com';
+    sails.GOOGLE_CONNECT_CLIENT_SECRET = 'Cql8UQrWMCSgPJwVGuNNOTPJ';
 
 }
 

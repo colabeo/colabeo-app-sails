@@ -228,12 +228,12 @@ passport.use("facebook-connect", new FacebookStrategy({
     }
 ));
 
-var GOOGLEPLUS_CLIENT_ID = sails.GOOGLEPLUS_CLIENT_ID;
-var GOOGLEPLUS_CLIENT_SECRET = sails.GOOGLEPLUS_CLIENT_SECRET;
+var GOOGLE_AUTH_CLIENT_ID = sails.GOOGLE_AUTH_CLIENT_ID;
+var GOOGLE_AUTH_CLIENT_SECRET = sails.GOOGLE_AUTH_CLIENT_SECRET;
 
 passport.use(new GoogleStrategy({
-        clientID: GOOGLEPLUS_CLIENT_ID,
-        clientSecret: GOOGLEPLUS_CLIENT_SECRET,
+        clientID: GOOGLE_AUTH_CLIENT_ID,
+        clientSecret: GOOGLE_AUTH_CLIENT_SECRET,
         callbackURL: HOST_SERVER_URL + "/auth/google/callback",
         passReqToCallback: true
     },

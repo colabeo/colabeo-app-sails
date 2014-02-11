@@ -69,6 +69,12 @@ module.exports.routes = {
     action: 'welcome'
   },
 
+  'get /comingsoon' : {
+    controller: 'user',
+    action: 'comingsoon'
+  },
+
+
   'post /chatroom' : {
     controller: 'user',
     action: 'createDisposableChatRoom'

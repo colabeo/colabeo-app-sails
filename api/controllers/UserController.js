@@ -69,6 +69,12 @@ module.exports = {
     //return res.view();
   },
 
+  comingsoon : function(req, res, next) {
+    return res.view('user/comingsoon');
+    //return res.view();
+  },
+
+
   me : function(req, res) {
 
     if (req.isAuthenticated()) {

@@ -133,7 +133,7 @@ module.exports = {
 //          if ((user) && (req.body.RememberMe)) {
 //            res.cookie('_sessionToken', user._sessionToken, {expires: new Date(Date.now() + sails.sCOOKIE_LIFECYCLE), httpOnly: true});
 //          }
-          return res.redirect('/');
+          return res.redirect('/callback.html');
         })
       }
     )(req, res, next);

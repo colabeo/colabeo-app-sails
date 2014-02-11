@@ -120,23 +120,39 @@ Beepe
                     $(this).closest(".textbox-wrap").removeClass("focused");
                 });
 
-        $('.facebook.sign-in').oauthpopup({
-            path: "auth/facebook/<%=facebookscope%>",
-            callback: function(e) {
-                setTimeout(function() {
-                    parent.location.reload(true);
-                }, 100);
-            }
-        });
+        if (isMobile()) {
+            $('.facebook.sign-in').click(function(){
+                window.location = "auth/facebook/<%=facebookscope%>";
+            });
+            $('.google.sign-in').click(function(){
+                window.location = "auth/google/<%=googlescope%>";
+            });
+        } else {
+            $('.facebook.sign-in').oauthpopup({
+                path: "auth/facebook/<%=facebookscope%>",
+                callback: function(e) {
+                    setTimeout(function() {
+                        parent.location.reload(true);
+                    }, 100);
+                }
+            });
 
-        $('.google.sign-in').oauthpopup({
-            path: "auth/google/<%=googlescope%>",
-            callback: function(e) {
-                setTimeout(function() {
-                    parent.location.reload(true);
-                }, 100);
+            $('.google.sign-in').oauthpopup({
+                path: "auth/google/<%=googlescope%>",
+                callback: function(e) {
+                    setTimeout(function() {
+                        parent.location.reload(true);
+                    }, 100);
+                }
+            });
+        }
+
+        function isMobile() {
+            if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
+                return true;
             }
-        });
+            return false;
+        }
     });
 </script>
 </body>

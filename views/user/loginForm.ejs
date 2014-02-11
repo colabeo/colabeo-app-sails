@@ -39,10 +39,10 @@ Beepe
         <% } %>
 
         <div class="facebook sign-in animated fadeInLeftBig">
-            <a href="auth/facebook/<%=facebookscope%>">Sign in with Facebook</a>
+            <a ahref="auth/facebook/<%=facebookscope%>" target = "_top">Sign in with Facebook</a>
         </div>
         <div class="google sign-in animated fadeInRightBig">
-            <a href="auth/google/<%=googlescope%>">Sign in with Google+</a>
+            <a ahref="auth/google/<%=googlescope%>" target = "_top">Sign in with Google+</a>
         </div>
         <div class="or animated bounceIn">or</div>
         <div class="login-form-links animated bounceIn">
@@ -93,6 +93,7 @@ Beepe
 <!-- Media Query Support For Older Browsers [Ie 8 & lower] -->
 <script src="/linker/js/lib/respond.min.js"></script>
 
+<script src="/linker/js/lib/oauthpopup.js"></script>
 
 <!-- For Initializing Checkbox And Focus Event For Textbox -->
 <script type="text/javascript">
@@ -119,6 +120,23 @@ Beepe
                     $(this).closest(".textbox-wrap").removeClass("focused");
                 });
 
+        $('.facebook.sign-in').oauthpopup({
+            path: "auth/facebook/<%=facebookscope%>",
+            callback: function(e) {
+                setTimeout(function() {
+                    parent.location.reload(true);
+                }, 100);
+            }
+        });
+
+        $('.google.sign-in').oauthpopup({
+            path: "auth/google/<%=googlescope%>",
+            callback: function(e) {
+                setTimeout(function() {
+                    parent.location.reload(true);
+                }, 100);
+            }
+        });
     });
 </script>
 </body>

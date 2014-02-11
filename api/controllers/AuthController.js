@@ -177,7 +177,7 @@ module.exports = {
           console.log("b", b);
           console.log("after authorize", req.user);
 //          return res.json({ status : provider + " connected" });
-          return res.redirect('/');
+          return res.redirect('/callback.html');
         }
     )(req, res, next);
   },

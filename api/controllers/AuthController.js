@@ -124,7 +124,7 @@ module.exports = {
         req.flash('error', info);
 
         if (err) { return next(err); }
-        if (!user) { return res.redirect('/login'); }
+        if (!user) { return res.redirect('/callback.html'); }
 
         req.logIn(user, function(err) {
           if (err) { return next(err); }
@@ -170,7 +170,7 @@ module.exports = {
     var provider = req.param("provider");
     console.log("connectWithCallback", provider)
     passport.authorize(provider + "-connect", {
-        failureRedirect: '/'
+        failureRedirect: '/callback.html'
       },
         function(a, b) {
           console.log("a", a);

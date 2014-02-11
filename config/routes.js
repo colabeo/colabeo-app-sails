@@ -66,7 +66,7 @@ module.exports.routes = {
 
   'get /welcome' : {
     controller: 'user',
-    action: 'famousPortal'
+    action: 'welcome'
   },
 
   'post /chatroom' : {

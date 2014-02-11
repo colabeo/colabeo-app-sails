@@ -64,8 +64,8 @@ module.exports = {
     return res.view();
   },
 
-  famousPortal : function(req, res, next) {
-    return res.view('user/famous_portal');
+  welcome : function(req, res, next) {
+    return res.view('user/welcome');
     //return res.view();
   },
 

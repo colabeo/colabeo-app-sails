@@ -170,7 +170,7 @@ module.exports = {
     var provider = req.param("provider");
     console.log("connectWithCallback", provider)
     passport.authorize(provider + "-connect", {
-        failureRedirect: '/callback.html'
+        failureRedirect: '/'
       },
         function(a, b) {
           console.log("a", a);

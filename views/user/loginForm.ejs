@@ -130,32 +130,20 @@ Beepe
                     $(this).closest(".textbox-wrap").removeClass("focused");
                 });
 
-        if (isMobile()) {
-            $('.facebook.sign-in').click(function(){
-                window.location = "auth/facebook/<%=facebookscope%>";
-            });
-            $('.google.sign-in').click(function(){
-                window.location = "auth/google/<%=googlescope%>";
-            });
-        } else {
-            $('.facebook.sign-in').oauthpopup({
-                path: "auth/facebook/<%=facebookscope%>",
-                callback: function(e) {
-                    setTimeout(function() {
-                        parent.location.reload(true);
-                    }, 100);
-                }
-            });
 
-            $('.google.sign-in').oauthpopup({
-                path: "auth/google/<%=googlescope%>",
-                callback: function(e) {
-                    setTimeout(function() {
-                        parent.location.reload(true);
-                    }, 100);
-                }
-            });
-        }
+        $('.facebook.sign-in').oauthpopup({
+            path: "auth/facebook/<%=facebookscope%>",
+            callback: function(e) {
+                window.location = "/";
+            }
+        });
+
+        $('.google.sign-in').oauthpopup({
+            path: "auth/google/<%=googlescope%>",
+            callback: function(e) {
+                window.location = "/";
+            }
+        });
 
         function isMobile() {
             if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {

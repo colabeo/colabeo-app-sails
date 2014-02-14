@@ -1,5 +1,21 @@
+html {
+    background: url('/famous-time/content/images/wallpaper.jpg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+}
+
 body {
-    background-color: rgba(0,0,0,0.6);
+    background-color: rgba(0,0,0,0.2);
+    height: 100%;
+    position: absolute;
+    width: 100%;
+}
+
+.forgot-password {
+    position: absolute;
+    margin-top: -29px !important;
+    right: 40px;
+    z-index: 10;
+    font-size: 1.5em;
 }
 
 .beepe {

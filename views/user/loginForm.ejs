@@ -3,8 +3,8 @@
 <head>
     <title>Beepe Sign in</title>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
 
     <!-- Bootstrap 3 CSS -->
     <link href="/linker/styles/bootstrap.min.css" rel="stylesheet" />
@@ -37,21 +37,20 @@
 </head>
 <body oncontextmenu="return false;">
 <div class="title">
-Beepe
+    Beepe
 </div>
 <div class="container eternity-form">
     <div class="login-form-section">
-
         <% if ((message) && (message != "")) { %>
         <div class="login-form-links link2 animated bounceIn" style="">
             <span><%=message%></span>
         </div>
         <% } %>
 
-        <div class="facebook sign-in animated fadeInLeftBig">
+        <div class="facebook sign-in animated fadeInUp">
             <a ahref="auth/facebook/<%=facebookscope%>" target = "_top">Sign in with Facebook</a>
         </div>
-        <div class="google sign-in animated fadeInRightBig">
+        <div class="google sign-in animated fadeInUp">
             <a ahref="auth/google/<%=googlescope%>" target = "_top">Sign in with Google+</a>
         </div>
         <div class="or animated bounceIn">or</div>

@@ -1,8 +1,5 @@
 body {
-    height: 100%;
-    position: absolute;
-    width: 100%;
-    background: url('/famous-time/content/images/wallpaper-dark.jpg') no-repeat center center fixed;
+    background: url('/famous-time/content/images/wallpaper-dark.jpg');
     -webkit-background-size: cover;
     background-color: black;
     overflow: hidden;

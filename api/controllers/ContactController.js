@@ -238,7 +238,8 @@ module.exports = {
                     provider: "facebook",
                     id: friendList[i].id,
                     name: friendList[i].name,
-                    avatar: 'http://graph.facebook.com/' + friendList[i].id + '/picture'
+                    avatar: 'http://graph.facebook.com/' + friendList[i].id + '/picture',
+                    username: friendList[i].username
                   };
                   contacts.push(tmp);
                 }

@@ -249,18 +249,45 @@ module.exports = {
     var callee = req.param('callee') ? JSON.parse(decodeURIComponent(req.param('callee'))) : null;
     if (callee) {
       var Chatroom = Parse.Object.extend("Chatroom");
-      var chatroom = new Chatroom();
-      chatroom.set("caller", req.user.id);
-      chatroom.set("calleeAccountProvider", callee.provider);
-      chatroom.set("calleeAccountId", callee.eid);
-      chatroom.save();
-      return res.json({ status : "successful"});
+      var disposableChatRoom = new Chatroom();
+      disposableChatRoom.set("caller", req.user.id);
+      disposableChatRoom.set("calleeAccountProvider", callee.provider);
+      disposableChatRoom.set("calleeAccountId", callee.eid);
+
+      disposableChatRoom.save(null, {
+        success: function(chatroom) {
+          // Execute any logic that should take place after the object is saved.
+          console.log('New disposableChatRoom created with objectId: ' + chatroom.id);
+          return res.json(chatroom);
+        },
+        error: function(chatroom, error) {
+          // Execute any logic that should take place if the save fails.
+          // error is a Parse.Error with an error code and description.
+          alert('Failed to create new disposableChatRoom, with error code: ' + error.description);
+          return res.json({ error : error});
+        }
+      });
     } else {
       return res.json({ error : "callee is missing"});
     }
   },
 
   enterDisposableChatRoom : function(req, res) {
-
+    var disposableChatRoomId = req.param('id') ? JSON.parse(decodeURIComponent(req.param('id'))) : null;
+    var Chatroom = Parse.Object.extend("Chatroom");
+    var query = new Parse.Query(Chatroom);
+    query.get(disposableChatRoomId, {
+      success: function(chatroom) {
+        // Execute any logic that should take place after the object is saved.
+        console.log('Retrieved disposableChatRoom with objectId: ' + chatroom.id);
+        return res.json(chatroom);
+      },
+      error: function(chatroom, error) {
+        // Execute any logic that should take place if the save fails.
+        // error is a Parse.Error with an error code and description.
+        alert('Failed to retrieve disposableChatRoom, with error code: ' + error.description);
+        return res.json({ error : error});
+      }
+    });
   }
 };

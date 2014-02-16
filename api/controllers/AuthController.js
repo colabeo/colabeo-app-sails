@@ -124,7 +124,7 @@ module.exports = {
         req.flash('error', info);
 
         if (err) { return next(err); }
-        if (!user) { return res.redirect('/login'); }
+        if (!user) { return res.redirect('/callback.html'); }
 
         req.logIn(user, function(err) {
           if (err) { return next(err); }
@@ -133,7 +133,7 @@ module.exports = {
 //          if ((user) && (req.body.RememberMe)) {
 //            res.cookie('_sessionToken', user._sessionToken, {expires: new Date(Date.now() + sails.sCOOKIE_LIFECYCLE), httpOnly: true});
 //          }
-          return res.redirect('/');
+          return res.redirect('/callback.html');
         })
       }
     )(req, res, next);
@@ -170,14 +170,14 @@ module.exports = {
     var provider = req.param("provider");
     console.log("connectWithCallback", provider)
     passport.authorize(provider + "-connect", {
-        failureRedirect: '/'
+        failureRedirect: '/callback.html'
       },
         function(a, b) {
           console.log("a", a);
           console.log("b", b);
           console.log("after authorize", req.user);
 //          return res.json({ status : provider + " connected" });
-          return res.redirect('/');
+          return res.redirect('/callback.html');
         }
     )(req, res, next);
   },

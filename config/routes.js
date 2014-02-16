@@ -40,7 +40,7 @@ module.exports.routes = {
 
 
   // But what if you want your home page to display
-  // a signup form located at `views/user/signup.ejs`?
+  // a signup form located at `views/user/signup.ejs`? Original
   '/': {
     controller: 'home',
     action: 'index'
@@ -63,6 +63,17 @@ module.exports.routes = {
     controller: 'user',
     action: 'findUsersByExternalAccounts'
   },
+
+  'get /welcome' : {
+    controller: 'user',
+    action: 'welcome'
+  },
+
+  'get /comingsoon' : {
+    controller: 'user',
+    action: 'comingsoon'
+  },
+
 
   'post /chatroom' : {
     controller: 'user',

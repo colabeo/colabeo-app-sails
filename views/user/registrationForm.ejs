@@ -1,8 +1,7 @@
-
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Colabeo Signup</title>
+    <title>Beepe Signup</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -24,11 +23,22 @@
 
     <!-- Google Web Fonts -->
     <link href='//fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css'>
+    <link href='//fonts.googleapis.com/css?family=Oleo+Script' rel='stylesheet' type='text/css'>
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-46143891-2', 'beepe.me');
+        ga('send', 'pageview');
+
+    </script>
 </head>
-<body style="background-color: grey">
-<br />
-<br />
-<br />
+<body oncontextmenu="return false;">
+<div class="title">
+    Beepe
+</div>
 <div class="container eternity-form">
     <div class="registration-form-section">
         <% if ((message) && (message != "")) { %>
@@ -38,23 +48,19 @@
         <% } %>
 
         <form method="POST" action="/signup">
-            <div class="section-title reg-header animated fadeInDown">
-                <h3>Get your Account Here </h3>
-
-            </div>
             <div class="clearfix">
                 <div class="col-sm-6 registration-left-section  animated fadeInUp">
                     <div class="reg-content">
                         <div class="textbox-wrap">
                             <div class="input-group">
                                 <span class="input-group-addon "><i class="icon-user icon-color"></i></span>
-                                <input type="text" name="firstname" class="form-control " placeholder="FirstName" required="required" />
+                                <input type="text" name="firstname" class="form-control " placeholder="First Name" required="required" />
                             </div>
                         </div>
                         <div class="textbox-wrap">
                             <div class="input-group">
                                 <span class="input-group-addon "><i class="icon-user icon-color"></i></span>
-                                <input type="text" name="lastname" class="form-control " placeholder="LastName" required="required"/>
+                                <input type="text" name="lastname" class="form-control " placeholder="Last Name" required="required"/>
                             </div>
                         </div>
                         <div class="textbox-wrap">
@@ -63,12 +69,6 @@
                                 <input type="email" name="email" class="form-control " placeholder="Email Address" required="required" />
                             </div>
                         </div>
-
-
-                    </div>
-                </div>
-                <div class="col-sm-6 registration-right-section animated fadeInUp">
-                    <div class="reg-content">
                         <div class="textbox-wrap">
                             <div class="input-group">
                                 <span class="input-group-addon "><i class="icon-key icon-color"></i></span>
@@ -81,14 +81,14 @@
                                 <input type="password" name="confirmedpassword" class="form-control " placeholder="Confirm-Password" required="required" />
                             </div>
                         </div>
+                        <div class="login-form-action clearfix">
+                            <a href="/" class="beepe-blue">
+                                Sign in
+                            </a>
+                            <button type="submit" class="btn pull-right beepe">Sign up</button>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="registration-form-action clearfix animated fadeInUp">
-                <a href="/" class="btn btn-success pull-left blue-btn ">
-                    <i class="icon-chevron-left"></i>&nbsp; &nbsp;Back To Login
-                </a>
-                <button type="submit" class="btn btn-success pull-right green-btn ">Register Now &nbsp; <i class="icon-chevron-right"></i></button>
 
             </div>
         </form>
@@ -101,16 +101,16 @@
 
 
 <!-- Jquery   -->
-<script src="/js/lib/jquery/jquery-1.9.1.min.js"></script>
+<script src="/linker/js/lib/jquery/jquery-1.9.1.min.js"></script>
 
 <!-- PlaceHolder For Older Browsers -->
-<script src="/js/lib/placeholders.min.js"></script>
+<script src="/linker/js/lib/placeholders.min.js"></script>
 
 <!-- Custom Checkbox PLugin -->
-<script src="/js/lib/jquery/jquery.icheck.js"></script>
+<script src="/linker/js/lib/jquery/jquery.icheck.js"></script>
 
 <!-- Media Query Support For Older Browsers [Ie 8 & lower] -->
-<script src="/js/lib/respond.min.js"></script>
+<script src="/linker/js/lib/respond.min.js"></script>
 
 
 

@@ -64,6 +64,17 @@ module.exports = {
     return res.view();
   },
 
+  welcome : function(req, res, next) {
+    return res.view('user/welcome');
+    //return res.view();
+  },
+
+  comingsoon : function(req, res, next) {
+    return res.view('user/comingsoon');
+    //return res.view();
+  },
+
+
   me : function(req, res) {
 
     if (req.isAuthenticated()) {

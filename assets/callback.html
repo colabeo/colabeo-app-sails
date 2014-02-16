@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <script type="text/javascript">
+        if (isMobile()) {
+            window.location = "/";
+        } else {
+            window.close();
+        }
+
+        function isMobile() {
+            if( /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent) ) {
+                return true;
+            }
+            return false;
+        }
+    </script>
+</head>
+<body>
+</body>
+</html>

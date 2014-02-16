@@ -3,6 +3,8 @@ git clone git@github.com:colabeo/colabeo-app-sails.git
 
 git clone git@github.com:colabeo/colabeo-client.git
 
+git clone git@github.com:colabeo/colabeo-core.git
+
 cd colabeo-app-sails
 
 sudo npm install
@@ -11,7 +13,19 @@ cd assets
 
 ln -s ../../colabeo-client famous-time
 
-cd ../../colabeo-client
+cd famous-time
+
+git pull
+
+bower install
+
+cd assets
+
+ln -s ../../colabeo-core/colabeo-heroku-apps/famous-portal famous-portal
+
+cd famous-portal
+
+git pull
 
 bower install
 

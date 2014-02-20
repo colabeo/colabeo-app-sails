@@ -74,6 +74,10 @@ module.exports.routes = {
     action: 'comingsoon'
   },
 
+  'get /call' : {
+    controller: 'user',
+    action: 'call'
+  },
 
   'post /chatroom' : {
     controller: 'user',

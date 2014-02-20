@@ -74,6 +74,9 @@ module.exports = {
     //return res.view();
   },
 
+  call : function(req, res, next) {
+    return res.view('user/famous_time');
+  },
 
   me : function(req, res) {
 

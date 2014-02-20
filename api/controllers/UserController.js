@@ -273,7 +273,7 @@ module.exports = {
   },
 
   enterDisposableChatRoom : function(req, res) {
-    var disposableChatRoomId = req.param('id') ? JSON.parse(decodeURIComponent(req.param('id'))) : null;
+    var disposableChatRoomId = req.param('id') ? req.param('id') : null;
     var Chatroom = Parse.Object.extend("Chatroom");
     var query = new Parse.Query(Chatroom);
     query.get(disposableChatRoomId, {

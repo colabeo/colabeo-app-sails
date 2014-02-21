@@ -266,7 +266,7 @@ module.exports = {
         error: function(chatroom, error) {
           // Execute any logic that should take place if the save fails.
           // error is a Parse.Error with an error code and description.
-          alert('Failed to create new disposableChatRoom, with error code: ' + error.description);
+          console.log('Failed to create new disposableChatRoom, with error code: ' + error.description);
           return res.json({ error : error});
         }
       });
@@ -288,7 +288,7 @@ module.exports = {
       error: function(chatroom, error) {
         // Execute any logic that should take place if the save fails.
         // error is a Parse.Error with an error code and description.
-        alert('Failed to retrieve disposableChatRoom, with error code: ' + error.description);
+        console.log('Failed to retrieve disposableChatRoom, with error code: ' + error.description);
         return res.json({ error : error});
       }
     });

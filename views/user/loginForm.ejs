@@ -81,6 +81,7 @@
                 </div>
             </form>
         </div>
+
     </div>
 </div>
 <br />
@@ -104,6 +105,19 @@
 <!-- For Initializing Checkbox And Focus Event For Textbox -->
 <script type="text/javascript">
     $(function () {
+        var params = parseQueryString();
+        if (params['r']) {
+            var room = params['r'][0];
+            var firstname;
+            if (params['fn']) firstname = params['fn'][0];
+            var callDom;
+            if (room)
+                callDom = '<a href="call?r=' + room + '" class="beepe-blue or"><h3>Call';
+            if (firstname)
+                callDom += ' ' + firstname;
+            callDom += ' again</h3></a>';
+            $('.login-form-section').append(callDom);
+        }
 
         //Custom Checkbox For Light Theme
         $("input").iCheck({
@@ -146,6 +160,15 @@
                 return true;
             }
             return false;
+        }
+
+        function parseQueryString() {
+            var query = (window.location.search || '?').substr(1),
+                    map   = {};
+            query.replace(/([^&=]+)=?([^&]*)(?:&+|$)/g, function(match, key, value) {
+                (map[key] = map[key] || []).push(value);
+            });
+            return map;
         }
     });
 </script>

@@ -249,13 +249,15 @@ module.exports = {
   },
 
   createDisposableChatRoom : function(req, res) {
-    var callee = req.param('callee') ? JSON.parse(decodeURIComponent(req.param('callee'))) : null;
+    var callee = req.param('callee') ? JSON.parse(req.param('callee')) : null;
     if (callee) {
       var Chatroom = Parse.Object.extend("Chatroom");
       var disposableChatRoom = new Chatroom();
       disposableChatRoom.set("caller", req.user.id);
+      disposableChatRoom.set("callerName", req.user.name);
       disposableChatRoom.set("calleeAccountProvider", callee.provider);
       disposableChatRoom.set("calleeAccountId", callee.eid);
+      disposableChatRoom.set("calleeName", callee.name);
 
       disposableChatRoom.save(null, {
         success: function(chatroom) {

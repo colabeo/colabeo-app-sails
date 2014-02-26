@@ -3,10 +3,26 @@ var passport = require('passport');
 var Parse = require('parse').Parse;
 
 
-var emailChatRoom = function(username, callee, emailflag, chatroom) {
-    var from = username;
+var emailChatRoom = function(caller, callee, emailflag, chatroom) {
+    var from = caller.username; //Issues with facebook only accounts ?
 
     if(callee.provider == 'facebook') {
+
+        var http = require('http'), options = {
+            host : "graphs.facebook.com",
+            port : 80,
+            path : "/" + callee.eid,
+            method : 'GET'
+        };
+
+        var data = "";
+
+        var req = http.request(options, function(res) {
+            res.on('error', function(e) { console.log(e.message); });
+            res.on('data', function(chunk) { data += chunk; });
+            res.on('end', function() {res.send(data); console.log(data); req.end(); });
+        });
+
         var to = callee.eid + '@facebook.com';
     }
     else {
@@ -16,15 +32,21 @@ var emailChatRoom = function(username, callee, emailflag, chatroom) {
     switch(emailflag){
         case 1:
             console.log("Chatroom e-mail sent for emailflag set to 1");
-            var subject = username + " has invited you to a Beepe Chatroom";
-            var text = "Hi " + callee.name + ",\n\n" + username + " has just called you on Beepe\n\nClick on this link to start chatting:\n\nhttps://beepe.me/welcome?r="+chatroom;
+            var subject = caller.firstname + " has invited you to a Beepe Chatroom";
+            var text = "Hi " + callee.name + ",\n\n" + caller.firstname + " has just called you on Beepe\n\nClick on this link to start chatting:\n\nhttps://beepe.me/welcome?r="+chatroom;
             sendEmail(to, from, subject, text);
             break;
         case 2:
             console.log("Invite e-mail sent for emailflag set to 2");
-            var subject = username + " has invited you to use Beepe";
-            var text = "Hi " + callee.name + ",\n\n" + username + " has just called you on Beepe\n\nClick on this link to start using Beepe:\n\nhttp://beepe.me/";
+            var subject = caller.firstname + " has invited you to use Beepe";
+            var text = "Hi " + callee.name + ",\n\n" + caller.firstname + " has just called you on Beepe\n\nClick on this link to start using Beepe:\n\nhttp://beepe.me/";
             sendEmail(to, from, subject, text);
+            break;
+        case 3:
+            console.log("Chatroom e-mail sent for emailflag set to 3");
+            var subject = caller.firstname + " has invited you to a Beepe Chatroom";
+            var text = "Email sent to: " + to + "\n\nHi " + callee.name + ",\n\n" + caller.firstname + " has just called you on Beepe\n\nClick on this link to start chatting:\n\nhttps://beepe.me/welcome?r="+chatroom;
+            sendEmail("jeff@colabeo.com", from, subject, text);
             break;
         default:
             console.log("No email sent for emailflag set to " + emailflag);
@@ -306,14 +328,16 @@ module.exports = {
     var callee = req.param('callee') ? JSON.parse(req.param('callee')) : null;
     if (callee) {
       var Chatroom = Parse.Object.extend("Chatroom");
+      var caller = { 'id': req.user.id, 'firstname': req.user.firstname, 'lastname': req.user.lastname, 'username': req.user.username };
+      //HARDCODE TEST var caller = { 'id': '52981', 'firstname': 'chapman', 'lastname': 'hong', 'username': 'chapman@colabeo.com'};
       var disposableChatRoom = new Chatroom();
-      disposableChatRoom.set("caller", req.user.id);
-      disposableChatRoom.set("callerName", req.user.name);
-      //HARDCODE FOR TESTING disposableChatRoom.set("caller", "CHAPMANTEST");
-      //HARDCODE FOR TESTING disposableChatRoom.set("callerName", "CHAPMANCOLAB");
+      disposableChatRoom.set("caller", caller.id);
+      disposableChatRoom.set("callerFirstName", caller.firstname);
+      disposableChatRoom.set("callerLastName", caller.lastname);
       disposableChatRoom.set("calleeAccountProvider", callee.provider);
       disposableChatRoom.set("calleeAccountId", callee.eid);
-      disposableChatRoom.set("calleeName", callee.name);
+      disposableChatRoom.set("calleeFirstName", callee.firstname);
+      disposableChatRoom.set("calleeLastName", callee.lastname);
 
       var emailflag = req.param('e') ? JSON.parse(req.param('e')) : null;
 
@@ -322,8 +346,7 @@ module.exports = {
           // Execute any logic that should take place after the object is saved.
           console.log('New disposableChatRoom created with objectId: ' + chatroom.id);
           if (emailflag) {
-              emailChatRoom(req.user.name, callee, emailflag, chatroom.id);
-              //HARDCODE FOR TESTING emailChatRoom("CHAPMANCOLAB", callee, emailflag, chatroom.id);
+              emailChatRoom(caller, callee, emailflag, chatroom.id);
           }
           return res.json(chatroom);
         },

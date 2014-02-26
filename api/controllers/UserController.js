@@ -2,6 +2,60 @@ var sails = require('sails');
 var passport = require('passport');
 var Parse = require('parse').Parse;
 
+
+var emailChatRoom = function(username, callee, emailflag, chatroom) {
+    var from = username;
+
+    if(callee.provider == 'facebook') {
+        var to = callee.eid + '@facebook.com';
+    }
+    else {
+        var to = callee.eid;
+    }
+
+    switch(emailflag){
+        case 1:
+            console.log("Chatroom e-mail sent for emailflag set to 1");
+            var subject = username + " has invited you to a Beepe Chatroom";
+            var text = "Hi " + callee.name + ",\n\n" + username + " has just called you on Beepe\n\nClick on this link to start chatting:\n\nhttps://beepe.me/welcome?r="+chatroom;
+            sendEmail(to, from, subject, text);
+            break;
+        case 2:
+            console.log("Invite e-mail sent for emailflag set to 2");
+            var subject = username + " has invited you to use Beepe";
+            var text = "Hi " + callee.name + ",\n\n" + username + " has just called you on Beepe\n\nClick on this link to start using Beepe:\n\nhttp://beepe.me/";
+            sendEmail(to, from, subject, text);
+            break;
+        default:
+            console.log("No email sent for emailflag set to " + emailflag);
+    }
+};
+
+var sendEmail = function(to, from, subject, text) {
+    var API_USERNAME = "chapman";
+    var API_PASSWORD = "qwerty23";
+
+    var sendgrid  = require('sendgrid')(API_USERNAME, API_PASSWORD);
+
+    var smtpapiHeaders = new sendgrid.SmtpapiHeaders();
+    smtpapiHeaders.addFilterSetting('subscriptiontrack', 'enable', '0');
+    sendgrid.send({
+        smtpapi: smtpapiHeaders,
+        to:       to,
+        from:     from,
+        subject:  subject,
+        text : text
+    }, function(err, json) {
+        if (err) {
+            console.error(err);
+        }
+        else {
+            console.log(json);
+        }
+    });
+};
+
+
 /**
  * UserController
  *
@@ -255,14 +309,22 @@ module.exports = {
       var disposableChatRoom = new Chatroom();
       disposableChatRoom.set("caller", req.user.id);
       disposableChatRoom.set("callerName", req.user.name);
+      //HARDCODE FOR TESTING disposableChatRoom.set("caller", "CHAPMANTEST");
+      //HARDCODE FOR TESTING disposableChatRoom.set("callerName", "CHAPMANCOLAB");
       disposableChatRoom.set("calleeAccountProvider", callee.provider);
       disposableChatRoom.set("calleeAccountId", callee.eid);
       disposableChatRoom.set("calleeName", callee.name);
 
+      var emailflag = req.param('e') ? JSON.parse(req.param('e')) : null;
+
       disposableChatRoom.save(null, {
-        success: function(chatroom) {
+        success: function(chatroom, req) {
           // Execute any logic that should take place after the object is saved.
           console.log('New disposableChatRoom created with objectId: ' + chatroom.id);
+          if (emailflag) {
+              emailChatRoom(req.user.name, callee, emailflag, chatroom.id);
+              //HARDCODE FOR TESTING emailChatRoom("CHAPMANCOLAB", callee, emailflag, chatroom.id);
+          }
           return res.json(chatroom);
         },
         error: function(chatroom, error) {
@@ -295,4 +357,5 @@ module.exports = {
       }
     });
   }
+
 };

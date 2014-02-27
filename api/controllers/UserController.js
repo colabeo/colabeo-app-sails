@@ -8,32 +8,43 @@ var emailChatRoom = function(caller, callee, emailflag, chatroom) {
 
     if(callee.provider == 'facebook') {
 
-//        var http = require('http'), options = {
-//            host : "graphs.facebook.com",
-//            port : 80,
-//            path : "/" + callee.eid,
-//            method : 'GET'
-//        };
-//
-//        var data = "";
-//
-//        var req = http.request(options, function(res) {
-//            res.on('error', function(e) { console.log(e.message); });
-//            res.on('data', function(chunk) { data += chunk; });
-//            res.on('end', function() {res.send(data); console.log(data); req.end(); });
-//        });
-//
-//        var to = callee.eid + '@facebook.com';
-        emailflag = 0;
+        var http = require('http'), options = {
+            host : "graph.facebook.com",
+            port : 80,
+            path : "/" + callee.eid,
+            method : 'GET'
+        };
+
+        var callback = function(res) {
+            var data = "";
+            res.on('error', function(e) {
+                console.log(e.message);
+            });
+            res.on('data', function(chunk) {
+                data += chunk;
+            });
+            res.on('end', function() {
+                //console.log("END ********** " + data);
+                var fbData = JSON.parse(data);
+                var to = fbData.username + '@facebook.com';
+                sendInvite(emailflag, to, from, caller, callee, chatroom);
+
+            });
+        };
+        var req = http.request(options, callback);
+        req.end();
     }
     else if (callee.provider == 'google') {
         //var to = callee.email;
-        emailflag = 0;
     }
     else {
         var to = callee.email;
+        sendInvite(emailflag, to, from, caller, callee, chatroom);
     }
 
+};
+
+var sendInvite = function(emailflag, to, from, caller, callee, chatroom) {
     switch(emailflag){
         case 1:
             console.log("Chatroom e-mail sent for emailflag set to 1");
@@ -56,7 +67,7 @@ var emailChatRoom = function(caller, callee, emailflag, chatroom) {
         default:
             console.log("No email sent for emailflag set to " + emailflag);
     }
-};
+}
 
 var sendEmail = function(to, from, subject, text) {
     var API_USERNAME = "chapman";
@@ -78,6 +89,7 @@ var sendEmail = function(to, from, subject, text) {
         }
         else {
             console.log(json);
+            console.log("Sent to " + to);
         }
     });
 };
@@ -339,7 +351,7 @@ module.exports = {
           'lastname': req.user.attributes.lastname,
           'username': req.user.attributes.username
       };
-
+//      var caller = { 'id': 'ABCDEF', 'firstname': 'Chapman', 'lastname':'Hong', 'username':'chapmanhong@gmail.com' };
       var disposableChatRoom = new Chatroom();
       disposableChatRoom.set("caller", caller.id);
       disposableChatRoom.set("callerFirstName", caller.firstname);

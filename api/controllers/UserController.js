@@ -8,25 +8,27 @@ var emailChatRoom = function(caller, callee, emailflag, chatroom) {
 
     if(callee.provider == 'facebook') {
 
-        var http = require('http'), options = {
-            host : "graphs.facebook.com",
-            port : 80,
-            path : "/" + callee.eid,
-            method : 'GET'
-        };
-
-        var data = "";
-
-        var req = http.request(options, function(res) {
-            res.on('error', function(e) { console.log(e.message); });
-            res.on('data', function(chunk) { data += chunk; });
-            res.on('end', function() {res.send(data); console.log(data); req.end(); });
-        });
-
-        var to = callee.eid + '@facebook.com';
+//        var http = require('http'), options = {
+//            host : "graphs.facebook.com",
+//            port : 80,
+//            path : "/" + callee.eid,
+//            method : 'GET'
+//        };
+//
+//        var data = "";
+//
+//        var req = http.request(options, function(res) {
+//            res.on('error', function(e) { console.log(e.message); });
+//            res.on('data', function(chunk) { data += chunk; });
+//            res.on('end', function() {res.send(data); console.log(data); req.end(); });
+//        });
+//
+//        var to = callee.eid + '@facebook.com';
+        emailflag = 0;
     }
     else if (callee.provider == 'google') {
-        var to = callee.email;
+        //var to = callee.email;
+        emailflag = 0;
     }
     else {
         var to = callee.email;

@@ -328,8 +328,13 @@ module.exports = {
     var callee = req.param('callee') ? JSON.parse(req.param('callee')) : null;
     if (callee) {
       var Chatroom = Parse.Object.extend("Chatroom");
-      var caller = { 'id': req.user.id, 'firstname': req.user.firstname, 'lastname': req.user.lastname, 'username': req.user.username };
-      //HARDCODE TEST var caller = { 'id': '52981', 'firstname': 'chapman', 'lastname': 'hong', 'username': 'chapman@colabeo.com'};
+      var caller = {
+          'id': req.user.id,
+          'firstname': req.user.attributes.firstname,
+          'lastname': req.user.attributes.lastname,
+          'username': req.user.attributes.username
+      };
+
       var disposableChatRoom = new Chatroom();
       disposableChatRoom.set("caller", caller.id);
       disposableChatRoom.set("callerFirstName", caller.firstname);

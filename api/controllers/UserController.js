@@ -25,8 +25,11 @@ var emailChatRoom = function(caller, callee, emailflag, chatroom) {
 
         var to = callee.eid + '@facebook.com';
     }
+    else if (callee.provider == 'google') {
+        var to = callee.email;
+    }
     else {
-        var to = callee.eid;
+        var to = callee.email;
     }
 
     switch(emailflag){

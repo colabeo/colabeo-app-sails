@@ -2,44 +2,50 @@ var sails = require('sails');
 var passport = require('passport');
 var Parse = require('parse').Parse;
 
-
+//TODO: Parameters for this function might need to change?
 var emailChatRoom = function(caller, callee, emailflag, chatroom) {
     var from = caller.username; //Issues with facebook only accounts ?
 
     if(callee.provider == 'facebook') {
 
-        var http = require('http'), options = {
-            host : "graph.facebook.com",
-            port : 80,
-            path : "/" + callee.eid,
-            method : 'GET'
-        };
+//        var http = require('http'), options = {
+//            host : "graph.facebook.com",
+//            port : 80,
+//            path : "/" + callee.eid,
+//            method : 'GET'
+//        };
+//
+//        var callback = function(res) {
+//            var data = "";
+//            res.on('error', function(e) {
+//                console.log(e.message);
+//            });
+//            res.on('data', function(chunk) {
+//                data += chunk;
+//            });
+//            res.on('end', function() {
+//                //console.log("END ********** " + data);
+//                var fbData = JSON.parse(data);
+//                var to = fbData.username + '@facebook.com';
+//                sendInvite(emailflag, to, from, caller, callee, chatroom);
+//
+//            });
+//        };
+//        var req = http.request(options, callback);
+//        req.end();
 
-        var callback = function(res) {
-            var data = "";
-            res.on('error', function(e) {
-                console.log(e.message);
-            });
-            res.on('data', function(chunk) {
-                data += chunk;
-            });
-            res.on('end', function() {
-                //console.log("END ********** " + data);
-                var fbData = JSON.parse(data);
-                var to = fbData.username + '@facebook.com';
-                sendInvite(emailflag, to, from, caller, callee, chatroom);
-
-            });
-        };
-        var req = http.request(options, callback);
-        req.end();
+        //TODO: example var link = https://www.facebook.com/dialog/send?app_id=648143008577417&link=https://beepe.me/welcome?r=asdfljkl&to=520918427&display=popup
+        //TODO: the r = parameter is the chatroom.id and the to = paramater is facebook id callee.id
+        //TODO: return res.json(chatroom and link) to jeff
     }
     else if (callee.provider == 'google') {
         //var to = callee.email;
+        //TODO: return res.json(chatroom) for now until we figure what we need to for that
     }
     else {
         var to = callee.email;
         sendInvite(emailflag, to, from, caller, callee, chatroom);
+        //TODO: return res.json(chatroom)
     }
 
 };
@@ -368,9 +374,9 @@ module.exports = {
           // Execute any logic that should take place after the object is saved.
           console.log('New disposableChatRoom created with objectId: ' + chatroom.id);
           if (emailflag) {
-              emailChatRoom(caller, callee, emailflag, chatroom.id);
+              emailChatRoom(caller, callee, emailflag, chatroom.id); //TODO: ? add res as a paramter to the function ? emailChatRoom line 6
           }
-          return res.json(chatroom);
+          return res.json(chatroom); //TODO: move this return to happen after emailChatRoom line 6
         },
         error: function(chatroom, error) {
           // Execute any logic that should take place if the save fails.

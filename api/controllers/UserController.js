@@ -14,7 +14,7 @@ var emailChatRoom = function(caller, callee, emailflag, chatroom) {
         var options = {
           host: 'www.facebook.com',
           port: 443,
-          path: '/dialog/send?app_id=' + 648143008577417 + '&link=https://beepe.me/welcome?r=' + chatroom.id + '&to=' + callee.id + '&display=popup',
+          path: '/dialog/send?app_id=' + applicationId + '&link=https://beepe.me/welcome?r=' + chatroom.id + '&to=' + callee.id + '&display=popup',
           method: 'GET'
         };
 

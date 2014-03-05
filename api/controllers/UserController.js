@@ -2,6 +2,7 @@ var sails = require('sails');
 var passport = require('passport');
 var Parse = require('parse').Parse;
 var https = require('https');
+var http = require('http');
 
 //TODO: Parameters for this function might need to change?
 var emailChatRoom = function(caller, callee, emailflag, chatroom) {

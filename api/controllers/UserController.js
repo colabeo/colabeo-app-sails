@@ -9,30 +9,30 @@ var emailChatRoom = function(caller, callee, emailflag, chatroom) {
 
     if(callee.provider == 'facebook') {
 
-        var applicationId = '648143008577417';
-
-        var options = {
-          host: 'www.facebook.com',
-          port: 443,
-          path: '/dialog/send?app_id=' + applicationId + '&link=https://beepe.me/welcome?r=' + chatroom.id + '&to=' + callee.id + '&display=popup',
-          method: 'GET'
-        };
-
-        var callback = function(res) {
-            var data = "";
-            res.on('error', function(e) {
-                console.log(e.message);
-            });
-            res.on('data', function(chunk) {
-                data += chunk;
-            });
-            res.on('end', function() {
-              console.log("END ********** " + data);
-              return res.json(chatroom);
-            });
-        };
-        var req = http.request(options, callback);
-        req.end();
+//        var applicationId = '648143008577417';
+//
+//        var options = {
+//          host: 'www.facebook.com',
+//          port: 443,
+//          path: '/dialog/send?app_id=' + applicationId + '&link=https://beepe.me/welcome?r=' + chatroom.id + '&to=' + callee.id + '&display=popup',
+//          method: 'GET'
+//        };
+//
+//        var callback = function(res) {
+//            var data = "";
+//            res.on('error', function(e) {
+//                console.log(e.message);
+//            });
+//            res.on('data', function(chunk) {
+//                data += chunk;
+//            });
+//            res.on('end', function() {
+//              console.log("END ********** " + data);
+//              return res.json(chatroom);
+//            });
+//        };
+//        var req = http.request(options, callback);
+//        req.end();
 
         //TODO: example var link = https://www.facebook.com/dialog/send?app_id=648143008577417&link=https://beepe.me/welcome?r=asdfljkl&to=520918427&display=popup
         //TODO: the r = parameter is the chatroom.id and the to = paramater is facebook id callee.id

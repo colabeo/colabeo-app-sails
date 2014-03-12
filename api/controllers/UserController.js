@@ -172,29 +172,37 @@ module.exports = {
   },
 
   findUserEmailByUserId : function(userId, req, res) {
-    var User = Parse.Object.extend("User");
-    var query = new Parse.Query(User);
-    query.get(userId, {
-      success: function(user) {
-        // Execute any logic that should take place after the object is saved.
-        console.log('Retrieved User with objectId: ' + userId);
-        if (res) {
-          return res.json(user);
-        } else {
-          return user;
+    if (userId) {
+      var User = Parse.Object.extend("User");
+      var query = new Parse.Query(User);
+      query.get(userId, {
+        success: function(user) {
+          // Execute any logic that should take place after the object is saved.
+          console.log('Retrieved User with objectId: ' + userId);
+          if (res) {
+            return res.json(user);
+          } else {
+            return user;
+          }
+        },
+        error: function(user, error) {
+          // Execute any logic that should take place if the save fails.
+          // error is a Parse.Error with an error code and description.
+          console.log('Failed to retrieve User, with error code: ' + error.description);
+          if (res) {
+            return res.json({ error : error});
+          } else {
+            return error;
+          }
         }
-      },
-      error: function(user, error) {
-        // Execute any logic that should take place if the save fails.
-        // error is a Parse.Error with an error code and description.
-        console.log('Failed to retrieve User, with error code: ' + error.description);
-        if (res) {
-          return res.json({ error : error});
-        } else {
-          return error;
-        }
+      });
+    } else {
+      if (res) {
+        return res.json({ error : 'User id is missing' });
+      } else {
+        return { error : 'User id is missing' };
       }
-    });
+    }
   },
 
   findUserByExternalAccount : function(req, res) {

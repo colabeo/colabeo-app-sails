@@ -79,6 +79,11 @@ module.exports.routes = {
     action: 'call'
   },
 
+  'get /dcr/:id' : {
+    controller: 'user',
+    action: 'dcr'
+  },
+
   'post /chatroom' : {
     controller: 'user',
     action: 'createDisposableChatRoom'

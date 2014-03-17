@@ -156,6 +156,12 @@ module.exports = {
     return res.view('user/famous_time');
   },
 
+  dcr : function(req, res, next) {
+    var dcrId = req.param("id");
+    console.log("dcr id - ", dcrId);
+    return res.view('user/famous_time');
+  },
+
   me : function(req, res) {
 
     if (req.isAuthenticated()) {

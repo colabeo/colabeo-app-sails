@@ -159,7 +159,7 @@ module.exports = {
   dcr : function(req, res, next) {
     var dcrId = req.param("id");
     console.log("dcr id - ", dcrId);
-    return res.view('user/famous_time');
+    return res.view('home/famous_time');
   },
 
   me : function(req, res) {

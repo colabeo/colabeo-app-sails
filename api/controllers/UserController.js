@@ -1,57 +1,122 @@
 var sails = require('sails');
 var passport = require('passport');
 var Parse = require('parse').Parse;
+var randomstring = require("randomstring");
 
-var emailChatRoom = function(caller, callee, emailflag, chatroom) {
+function setupDCR(chatid, caller, callee) {
+    var Chatroom = Parse.Object.extend("Chatroom");
+    var disposableChatRoom = new Chatroom();
+
+    disposableChatRoom.set("uuid", chatid);
+
+    disposableChatRoom.set("caller", caller.id);
+    disposableChatRoom.set("callerFirstName", caller.firstname);
+    disposableChatRoom.set("callerLastName", caller.lastname);
+
+    disposableChatRoom.set("calleeFirstName", callee.firstname);
+    disposableChatRoom.set("calleeLastName", callee.lastname);
+
+    if ( callee.cid ) {
+        disposableChatRoom.set("calleeCid", callee.cid);
+    }
+    else {
+        disposableChatRoom.set("calleeAccountProvider", callee.provider);
+        disposableChatRoom.set("calleeAccountId", callee.eid);
+    }
+
+    disposableChatRoom.save(null, {
+        success: function(chatroom, req) {
+            // Execute any logic that should take place after the object is saved.
+            console.log('New disposableChatRoom created with objectId: ' + chatroom.id + ' uuid: ' + chatid);
+            //return res.json(chatroom);
+        },
+        error: function(chatroom, error) {
+            // Execute any logic that should take place if the save fails.
+            // error is a Parse.Error with an error code and description.
+            console.log('Failed to create new disposableChatRoom, with error code: ' + error.description);
+            //return res.json({ error : error});
+        }
+    });
+}
+
+var setupCalleeFromCid = function (callee, callback) {
+
+        sails.controllers.user.findUserEmailByUserId(callee.cid, false, false, function(user) {
+
+            var u = JSON.parse(JSON.stringify(user));
+            callee.firstname = u.firstname;
+            callee.lastname = u.lastname;
+            callee.email = u.email;
+
+            callback(callee);
+        });
+}
+
+var emailChatRoom = function(chatroom, caller, callee, emailflag, debug) {
     var from = caller.username; //Issues with facebook only accounts ?
     var obj = {};
 
-    if(callee.provider == 'facebook') {
+    console.log("email chat room " + JSON.stringify(callee));
+
+    if ( callee.cid ) {
+        var to = callee.email;
+        sendMissedCall(to, from, caller, callee, chatroom, debug);
+        obj.status = "success";
+        return obj;
+    }
+    else if(callee.provider == 'facebook') {
 
         var applicationId = '648143008577417';
-        var link = "https://www.facebook.com/dialog/send?app_id=" + applicationId + "&link=https://beepe.me/welcome?r=" + chatroom + "&to=" + callee.id + "&display=popup";
+        var link = "https://www.facebook.com/dialog/send?app_id=" + applicationId + "&link=https://beepe.me/welcome?r=" + chatroom + "&to=" + callee.eid + "&display=popup";
         obj.link = link;
         obj.status = "success";
 
         return obj;
     }
     else if (callee.provider == 'google') {
-        //var to = callee.email;
         obj.status = "success";
         return obj;
     }
     else {
         var to = callee.email;
-        sendInvite(emailflag, to, from, caller, callee, chatroom);
+
+        switch (emailflag) {
+            case 1:
+                sendInvite(to, from, caller, callee, chatroom, debug);
+                break;
+            case 2:
+                sendMissedCall(to, from, caller, callee, chatroom, debug);
+                break;
+            default:
+                console.log("No emailflag set");
+        }
         obj.status = "success";
         return obj;
     }
 
 };
 
-var sendInvite = function(emailflag, to, from, caller, callee, chatroom) {
-    switch(emailflag){
-        case 1:
-            console.log("Chatroom e-mail sent for emailflag set to 1");
-            var subject = caller.firstname + " has invited you to a Beepe Chatroom";
-            var text = "Hi " + callee.name + ",\n\n" + caller.firstname + " has just called you on Beepe\n\nClick on this link to start chatting:\n\nhttps://beepe.me/welcome?r="+chatroom;
-            sendEmail(to, from, subject, text);
-            break;
-        case 2:
-            console.log("Invite e-mail sent for emailflag set to 2");
-            var subject = caller.firstname + " has invited you to use Beepe";
-            var text = "Hi " + callee.name + ",\n\n" + caller.firstname + " has just called you on Beepe\n\nClick on this link to start using Beepe:\n\nhttp://beepe.me/";
-            sendEmail(to, from, subject, text);
-            break;
-        case 3:
-            console.log("Chatroom e-mail sent for emailflag set to 3");
-            var subject = caller.firstname + " has invited you to a Beepe Chatroom";
-            var text = "Email sent to: " + to + "\n\nHi " + callee.name + ",\n\n" + caller.firstname + " has just called you on Beepe\n\nClick on this link to start chatting:\n\nhttps://beepe.me/welcome?r="+chatroom;
-            sendEmail("jeff@colabeo.com", from, subject, text);
-            break;
-        default:
-            console.log("No email sent for emailflag set to " + emailflag);
+var sendInvite = function(to, from, caller, callee, chatroom, debug) {
+
+    console.log("Invited Chatroom e-mail sent for emailflag set to 1");
+    var subject = caller.firstname + " has invited you to a Beepe Chatroom";
+    var text = "Hi " + callee.firstname + ",\n\n" + caller.firstname + " has just called you on Beepe\n\nClick on this link to start chatting:\n\nhttps://beepe.me/welcome?r="+chatroom;
+    if ( debug ) {
+        text = "Email sent to: " + to + "\n\n" + text;
+        to = "chapman@colabeo.com";
     }
+    sendEmail(to, from, subject, text);
+}
+
+var sendMissedCall = function(to, from, caller, callee, chatroom, debug) {
+    console.log("Missed Call e-mail sent for emailflag set to 2");
+    var subject = caller.firstname + " has just called you on Beepe";
+    var text = "Hi " + callee.firstname + ",\n\n" + caller.firstname + " has just called you on Beepe\n\nClick on this link to call them back using Beepe:\n\nhttps://beepe.me/welcome?r=" + chatroom;
+    if ( debug ) {
+        text = "Email sent to: " + to + "\n\n" + text;
+        to = "chapman@colabeo.com";
+    }
+    sendEmail(to, from, subject, text);
 }
 
 var sendEmail = function(to, from, subject, text) {
@@ -153,7 +218,7 @@ module.exports = {
   },
 
   call : function(req, res, next) {
-    return res.view('user/famous_time');
+    return res.view('home/famous_time');
   },
 
   dcr : function(req, res, next) {
@@ -177,7 +242,7 @@ module.exports = {
 
   },
 
-  findUserEmailByUserId : function(userId, req, res) {
+  findUserEmailByUserId : function(userId, req, res, callback) {
     if (userId) {
       var User = Parse.Object.extend("User");
       var query = new Parse.Query(User);
@@ -188,6 +253,7 @@ module.exports = {
           if (res) {
             return res.json(user);
           } else {
+            if (callback) callback(user);
             return user;
           }
         },
@@ -368,8 +434,14 @@ module.exports = {
 
   createDisposableChatRoom : function(req, res) {
     var callee = req.param('callee') ? JSON.parse(req.param('callee')) : null;
+    var emailflag = req.param('e') ? JSON.parse(req.param('e')) : null;
+    var debug = req.param('d') ? JSON.parse(req.param('d')) : null;
+
+    var chatid = randomstring.generate(6); //TODO: Update to higher number when more users
+    var returnobj = {};
+
     if (callee) {
-      var Chatroom = Parse.Object.extend("Chatroom");
+      //Setting up the caller
       var caller = {
           'id': req.user.id,
           'firstname': req.user.attributes.firstname,
@@ -377,48 +449,54 @@ module.exports = {
           'username': req.user.attributes.username
       };
 //      var caller = { 'id': 'ABCDEF', 'firstname': 'Chapman', 'lastname':'Hong', 'username':'chapmanhong@gmail.com' };
-      var disposableChatRoom = new Chatroom();
-      disposableChatRoom.set("caller", caller.id);
-      disposableChatRoom.set("callerFirstName", caller.firstname);
-      disposableChatRoom.set("callerLastName", caller.lastname);
-      disposableChatRoom.set("calleeAccountProvider", callee.provider);
-      disposableChatRoom.set("calleeAccountId", callee.eid);
-      disposableChatRoom.set("calleeFirstName", callee.firstname);
-      disposableChatRoom.set("calleeLastName", callee.lastname);
 
-      var emailflag = req.param('e') ? JSON.parse(req.param('e')) : null;
+      console.log("Callee info " + JSON.stringify(callee));
 
-      disposableChatRoom.save(null, {
-        success: function(chatroom, req) {
-          // Execute any logic that should take place after the object is saved.
-          console.log('New disposableChatRoom created with objectId: ' + chatroom.id);
-          if (emailflag && chatroom.attributes) {
-              chatroom.attributes.info = emailChatRoom(caller, callee, emailflag, chatroom.id);
-          }
-          console.log(chatroom);
-          return res.json(chatroom);
-        },
-        error: function(chatroom, error) {
-          // Execute any logic that should take place if the save fails.
-          // error is a Parse.Error with an error code and description.
-          console.log('Failed to create new disposableChatRoom, with error code: ' + error.description);
-          return res.json({ error : error});
-        }
-      });
+      switch (emailflag) {
+        case 1:
+            console.log("Invite");
+            setupDCR(chatid, caller, callee);
+            returnobj = emailChatRoom(chatid, caller, callee, emailflag, debug);
+            break;
+        case 2:
+            console.log("Missed Call");
+            setupCalleeFromCid(callee, function(postcallee) {
+                setupDCR(chatid, caller, postcallee);
+                emailChatRoom(chatid, caller, postcallee, emailflag, debug);
+            });
+
+            break;
+        default:
+            console.log("No email sent emailflag set to " + emailflag);
+      }
+      returnobj.chatid = chatid;
+      return res.json(returnobj);
+
     } else {
-      return res.json({ error : "callee is missing"});
+        return res.json({ error : "callee is missing"});
     }
+
   },
 
   enterDisposableChatRoom : function(req, res) {
     var disposableChatRoomId = req.param('id') ? req.param('id') : null;
     var Chatroom = Parse.Object.extend("Chatroom");
     var query = new Parse.Query(Chatroom);
-    query.get(disposableChatRoomId, {
-      success: function(chatroom) {
+
+    query.equalTo("uuid", disposableChatRoomId);
+    query.limit(1);
+    query.find({
+        success: function(chatroom) {
         // Execute any logic that should take place after the object is saved.
-        console.log('Retrieved disposableChatRoom with objectId: ' + chatroom.id);
-        return res.json(chatroom);
+        if ( chatroom[0] ) {
+            console.log("chatroom object " + JSON.stringify(chatroom[0]));
+            var c = JSON.parse(JSON.stringify(chatroom[0]));
+            console.log('Retrieved disposableChatRoom with objectId: ' + c.objectId);
+        }
+        else {
+            console.log('Chatroom not found with ' + disposableChatRoomId);
+        }
+        return res.json(chatroom[0]);
       },
       error: function(chatroom, error) {
         // Execute any logic that should take place if the save fails.

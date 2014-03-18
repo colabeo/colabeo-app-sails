@@ -103,7 +103,7 @@ var sendInvite = function(to, from, caller, callee, chatroom, debug) {
     var text = "Hi " + callee.firstname + ",\n\n" + caller.firstname + " has just called you on Beepe\n\nClick on this link to start chatting:\n\nhttps://beepe.me/welcome?r="+chatroom;
     if ( debug ) {
         text = "Email sent to: " + to + "\n\n" + text;
-        to = "chapman@colabeo.com";
+        to = "jeff@colabeo.com";
     }
     sendEmail(to, from, subject, text);
 }
@@ -114,7 +114,7 @@ var sendMissedCall = function(to, from, caller, callee, chatroom, debug) {
     var text = "Hi " + callee.firstname + ",\n\n" + caller.firstname + " has just called you on Beepe\n\nClick on this link to call them back using Beepe:\n\nhttps://beepe.me/welcome?r=" + chatroom;
     if ( debug ) {
         text = "Email sent to: " + to + "\n\n" + text;
-        to = "chapman@colabeo.com";
+        to = "jeff@colabeo.com";
     }
     sendEmail(to, from, subject, text);
 }

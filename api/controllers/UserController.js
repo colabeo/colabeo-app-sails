@@ -442,13 +442,13 @@ module.exports = {
 
     if (callee) {
       //Setting up the caller
-//      var caller = {
-//          'id': req.user.id,
-//          'firstname': req.user.attributes.firstname,
-//          'lastname': req.user.attributes.lastname,
-//          'username': req.user.attributes.username
-//      };
-      var caller = { 'id': 'ABCDEF', 'firstname': 'Chapman', 'lastname':'Hong', 'username':'chapmanhong@gmail.com' };
+      var caller = {
+          'id': req.user.id,
+          'firstname': req.user.attributes.firstname,
+          'lastname': req.user.attributes.lastname,
+          'username': req.user.attributes.username
+      };
+//      var caller = { 'id': 'ABCDEF', 'firstname': 'Chapman', 'lastname':'Hong', 'username':'chapmanhong@gmail.com' };
 
       console.log("Callee info " + JSON.stringify(callee));
 

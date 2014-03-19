@@ -28,14 +28,9 @@
     <link rel="apple-touch-startup-image" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)" href="content/apple-touch-startup-image-iphone-retina-568h@2x.png">
 
     <!-- Load CSS -->
-    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="css/famous.css" />
-    <link rel="stylesheet" type="text/css" href="css/fonts.css" />
-    <link rel="stylesheet" type="text/css" href="css/app.css" />
-    <link href="//fonts.googleapis.com/css?family=Oleo+Script" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="build.css" />
+    <script type="text/javascript" src="build.js" ></script>
 
-    <script type="text/javascript" src="build/famous.lib.js"></script>
-    <script type="text/javascript" src="build/app.js"></script>
     <script>
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
             (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -49,4 +44,7 @@
 </head>
 <body oncontextmenu="return false;">
 </body>
+<script>
+    require(["app/main/index.js"]);
+</script>
 </html>

@@ -1,5 +1,5 @@
 body {
-    background: url('/famous-time/content/images/wallpaper-dark.jpg');
+    background: url('/famous-time/content/images/wallpaper-dark.jpg') no-repeat center center fixed;
     -webkit-background-size: cover;
     background-color: black;
     overflow: hidden;

@@ -105,6 +105,7 @@ module.exports = {
       console.log(decodeURIComponent(scope));
       passport.authenticate(provider, { failureRedirect: '/login' , scope : decodeURIComponent(scope) })(req, res, next);
     } else {
+      console.log("loginWith no scope");
       passport.authenticate(provider, { failureRedirect: '/login' })(req, res, next);
     }
   },

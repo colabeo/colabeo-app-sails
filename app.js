@@ -40,8 +40,14 @@ if (DEVELOPMENT)  {
     // Google Connect Credentials
     sails.GOOGLE_CONNECT_CLIENT_ID = '406625335434-009hdb2qpv8le0v2pn0kj631fjltnhkn.apps.googleusercontent.com';
     sails.GOOGLE_CONNECT_CLIENT_SECRET = 'FIH9T8rkXagBW8_UWOen4csA';
-}
-else {
+
+    sails.GITHUB_CONNECT_CLIENT_ID = 'a692bb0475f59eaf95c1';
+    sails.GITHUB_CONNECT_CLIENT_SECRET = 'fa47117620f8ec110504bbb0f219ee2b8980b22a';
+
+    sails.TWITTER_OAUTH_CLIENT_ID = 'Hv7SUemRQ3vrIwZJ7Df66A';
+    sails.TWITTER_OAUTH_CLIENT_SECRET = 'FXj77nFhLydfiHoV2dem90kEnAz2T2yDT9BE70bNl88';
+
+} else {
     console.log("************** Production *****************");
     sails.FACEBOOK_APP_ID = '686271008083898';
     sails.FACEBOOK_APP_SECRET = '6cbe30c8c9655e28f3a148876a819565';
@@ -64,6 +70,11 @@ else {
     sails.GOOGLE_CONNECT_CLIENT_ID = '575666662072-mfpa2ci9me3lr0vpkvoqu2n2lin4urpn.apps.googleusercontent.com';
     sails.GOOGLE_CONNECT_CLIENT_SECRET = 'Cql8UQrWMCSgPJwVGuNNOTPJ';
 
+    sails.GITHUB_CONNECT_CLIENT_ID = '24c9189de792ff083814';
+    sails.GITHUB_CONNECT_CLIENT_SECRET = '5c0ec92f7cbbdf3fac78d68cb6aef51b8803ce24';
+
+    sails.TWITTER_OAUTH_CLIENT_ID = 'Hv7SUemRQ3vrIwZJ7Df66A';
+    sails.TWITTER_OAUTH_CLIENT_SECRET = 'FXj77nFhLydfiHoV2dem90kEnAz2T2yDT9BE70bNl88';
 }
 
 

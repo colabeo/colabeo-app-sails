@@ -281,7 +281,7 @@ module.exports = {
 
           // retrieve accessToken from user
           var accessToken = accounts[0].get("accessToken");
-          var apiPath = "/plus/v1/people/me/people/visible";
+          var apiPath = "/plus/v1/people/me/people/visible email";
 
           console.log(accessToken);
 
@@ -321,6 +321,91 @@ module.exports = {
                   if (friendList[i].objectType === "person") {
                     var tmp = {
                       provider: "google",
+                      id: friendList[i].id,
+                      name: friendList[i].displayName,
+                      avatar: friendList[i].image.url
+                    };
+                    contacts.push(tmp);
+                  }
+                }
+              }
+              done(contacts);
+            });
+          });
+
+          request.on('error', function(e){
+            console.log('error from getData: ' + e.message)
+          });
+
+          request.end();
+        },
+        error: function(error) {
+          return res.json({
+            status: 401
+          }, 401);
+        }
+      });
+    };
+
+    user.importTwitterContacts = function(done) {
+      console.log("importTwitterContacts()");
+
+      var self = this;
+
+      var query = new Parse.Query("Account");
+      query.equalTo("provider", "twitter");
+      query.equalTo("user", this);
+      query.find({
+        success: function(accounts) {
+
+          if (accounts.length === 0) {
+            return res.json({"code":401,"message":"Not authorized"}, 401);
+          }
+
+          console.log("Social account linkage found");
+
+          // retrieve accessToken from user
+          var accessToken = accounts[0].get("accessToken");
+          var apiPath = "/1.1/friends/list.json";
+
+          console.log(accessToken);
+
+          var options = {
+            host: 'api.twitter.com',
+            port: 443,
+//            path: apiPath + '?key=AIzaSyAqPnCk3pwWgHCZS2FrgZFFGvdWBRU7er4', //apiPath example: '/me/friends'
+            path: apiPath + '?cursor=-1&skip_status=true&include_user_entities=false',
+            method: 'GET'
+//            headers: {'Authorization':  'Bearer ' + accessToken}
+          };
+
+          var buffer = ''; //this buffer will be populated with the chunks of the data received from facebook
+          var request = https.get(options, function(result){
+//            console.log('HEADERS: ' + JSON.stringify(result.headers));
+            result.setEncoding('utf8');
+            result.on('data', function(chunk){
+              console.log('chunk - ', chunk);
+              buffer += chunk;
+            });
+
+            result.on('end', function(){
+
+              var result = JSON.parse(buffer);
+
+              if (result.error) {
+                done(result);
+              }
+
+              var friendList = result.items;
+
+              console.log("friendList ", result);
+
+              var contacts = [];
+              if (friendList) {
+                for (var i = 0; i < friendList.length; i++) {
+                  if (friendList[i].objectType === "person") {
+                    var tmp = {
+                      provider: "twitter",
                       id: friendList[i].id,
                       name: friendList[i].displayName,
                       avatar: friendList[i].image.url

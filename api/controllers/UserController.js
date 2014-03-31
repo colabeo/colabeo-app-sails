@@ -67,7 +67,7 @@ var emailChatRoom = function(chatroom, caller, callee, emailflag, debug) {
     else if(callee.provider == 'facebook') {
 
         var applicationId = '648143008577417';
-        var link = "https://www.facebook.com/dialog/send?app_id=" + applicationId + "&link=https://beepe.me/welcome?r=" + chatroom + "&to=" + callee.eid + "&display=popup";
+        var link = "https://www.facebook.com/dialog/send?app_id=" + applicationId + "&link=https://beepe.me/welcome?r=" + chatroom + "&to=" + callee.eid + "&display=popup&redirect_uri=https://beepe.me/";
         obj.link = link;
         obj.status = "success";
 
@@ -100,7 +100,10 @@ var sendInvite = function(to, from, caller, callee, chatroom, debug) {
 
     console.log("Invited Chatroom e-mail sent for emailflag set to 1");
     var subject = caller.firstname + " has invited you to a Beepe Chatroom";
-    var text = "Hi " + callee.firstname + ",\n\n" + caller.firstname + " has just called you on Beepe\n\nClick on this link to start chatting:\n\nhttps://beepe.me/welcome?r="+chatroom;
+    var text = ["Hi " , callee.firstname, ",\n\n",
+                caller.firstname, " has just called you on Beepe\n\n",
+                "Open this link with your Chrome browser to start chatting:\n\n",
+                "https://beepe.me/welcome?r="+chatroom].join("");
     if ( debug ) {
         text = "Email sent to: " + to + "\n\n" + text;
         to = "jeff@colabeo.com";
@@ -111,7 +114,10 @@ var sendInvite = function(to, from, caller, callee, chatroom, debug) {
 var sendMissedCall = function(to, from, caller, callee, chatroom, debug) {
     console.log("Missed Call e-mail sent for emailflag set to 2");
     var subject = caller.firstname + " has just called you on Beepe";
-    var text = "Hi " + callee.firstname + ",\n\n" + caller.firstname + " has just called you on Beepe\n\nClick on this link to call them back using Beepe:\n\nhttps://beepe.me/welcome?r=" + chatroom;
+    var text = [ "Hi ", callee.firstname , ",\n\n",
+                caller.firstname, " has just called you on Beepe\n\n",
+                "Open this link with your Chrome browser to call them back using Beepe:\n\n",
+                "https://beepe.me/welcome?r=", chatroom].join("");
     if ( debug ) {
         text = "Email sent to: " + to + "\n\n" + text;
         to = "jeff@colabeo.com";

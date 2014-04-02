@@ -74,6 +74,12 @@ module.exports.routes = {
     action: 'comingsoon'
   },
 
+  'get /invitation' : {
+    controller: 'user',
+    action: 'invitation'
+  },
+
+
   'get /call' : {
     controller: 'user',
     action: 'call'

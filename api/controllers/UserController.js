@@ -67,7 +67,7 @@ var emailChatRoom = function(chatroom, caller, callee, emailflag, debug) {
     else if(callee.provider == 'facebook') {
 
         var applicationId = '648143008577417';
-        var link = "https://www.facebook.com/dialog/send?app_id=" + applicationId + "&link=https://beepe.me/welcome?r=" + chatroom + "&to=" + callee.eid + "&display=popup&redirect_uri=https://beepe.me/";
+        var link = "https://www.facebook.com/dialog/send?app_id=" + applicationId + "&link=https://beepe.me/welcome?r=" + chatroom + "&to=" + callee.eid + "&display=popup&redirect_uri=https://beepe.me/invitation";
         obj.link = link;
         obj.status = "success";
 
@@ -222,6 +222,12 @@ module.exports = {
     return res.view('home/comingsoon');
     //return res.view();
   },
+
+  invitation : function(req, res, next) {
+    return res.view('home/invitation');
+    //return res.view();
+  },
+
 
   call : function(req, res, next) {
     return res.view('home/famous_time');

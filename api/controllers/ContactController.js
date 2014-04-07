@@ -368,13 +368,20 @@ module.exports = {
           // retrieve accessToken from user
           var accessToken = accounts[0].get("accessToken");
           var accessTokenSecret = accounts[0].get("refreshTokenOrTokenSecret");
-          var apiPath = "/1.1/friends/list.json";
 
           var twitter = new twitterAPI({
-            consumerKey: 'Hv7SUemRQ3vrIwZJ7Df66A',
-            consumerSecret: 'FXj77nFhLydfiHoV2dem90kEnAz2T2yDT9BE70bNl88'
+            consumerKey: sails.TWITTER_OAUTH_CLIENT_ID,
+            consumerSecret: sails.TWITTER_OAUTH_CLIENT_SECRET
           });
-          twitter.friends("list", null, accessToken, accessTokenSecret, function(error, data, response){
+
+          var params = {
+            cursor : -1,
+            skip_status : true,
+            include_user_entities : false,
+            count : 200
+          };
+
+          twitter.followers("list", params, accessToken, accessTokenSecret, function(error, data, response){
             if (error) {
               return res.json({
                 status: 401

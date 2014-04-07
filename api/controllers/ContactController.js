@@ -1,6 +1,7 @@
 var sails = require('sails');
 var Parse = require('parse').Parse;
 var https = require('https');
+var twitterAPI = require('node-twitter-api');
 
 var Firebase = require('firebase');
 var FirebaseTokenGenerator = require("firebase-token-generator");
@@ -366,63 +367,36 @@ module.exports = {
 
           // retrieve accessToken from user
           var accessToken = accounts[0].get("accessToken");
+          var accessTokenSecret = accounts[0].get("refreshTokenOrTokenSecret");
           var apiPath = "/1.1/friends/list.json";
 
-          console.log(accessToken);
-
-          var options = {
-            host: 'api.twitter.com',
-            port: 443,
-//            path: apiPath + '?key=AIzaSyAqPnCk3pwWgHCZS2FrgZFFGvdWBRU7er4', //apiPath example: '/me/friends'
-            path: apiPath + '?cursor=-1&skip_status=true&include_user_entities=false',
-            method: 'GET'
-//            headers: {'Authorization':  'Bearer ' + accessToken}
-          };
-
-          var buffer = ''; //this buffer will be populated with the chunks of the data received from facebook
-          var request = https.get(options, function(result){
-//            console.log('HEADERS: ' + JSON.stringify(result.headers));
-            result.setEncoding('utf8');
-            result.on('data', function(chunk){
-              console.log('chunk - ', chunk);
-              buffer += chunk;
-            });
-
-            result.on('end', function(){
-
-              var result = JSON.parse(buffer);
-
-              if (result.error) {
-                done(result);
-              }
-
-              var friendList = result.items;
-
-              console.log("friendList ", result);
-
+          var twitter = new twitterAPI({
+            consumerKey: 'Hv7SUemRQ3vrIwZJ7Df66A',
+            consumerSecret: 'FXj77nFhLydfiHoV2dem90kEnAz2T2yDT9BE70bNl88'
+          });
+          twitter.friends("list", null, accessToken, accessTokenSecret, function(error, data, response){
+            if (error) {
+              return res.json({
+                status: 401
+              }, 401);
+            } else {
               var contacts = [];
-              if (friendList) {
-                for (var i = 0; i < friendList.length; i++) {
-                  if (friendList[i].objectType === "person") {
-                    var tmp = {
-                      provider: "twitter",
-                      id: friendList[i].id,
-                      name: friendList[i].displayName,
-                      avatar: friendList[i].image.url
-                    };
-                    contacts.push(tmp);
-                  }
+              if (data) {
+                console.log(data.users);
+                for (var i = 0; i < data.users.length; i++) {
+                  var tmp = {
+                    provider: "twitter",
+                    id: data.users[i].id_str,
+                    name: data.users[i].name,
+                    avatar: data.users[i].profile_image_url
+                  };
+                  contacts.push(tmp);
                 }
               }
+              console.log(contacts);
               done(contacts);
-            });
+            }
           });
-
-          request.on('error', function(e){
-            console.log('error from getData: ' + e.message)
-          });
-
-          request.end();
         },
         error: function(error) {
           return res.json({
@@ -443,6 +417,14 @@ module.exports = {
       user.importGoogleContacts(function(json) {
         return res.json(json);
       });
+    } else if (source === "twitter") {
+      user.importTwitterContacts(function(json) {
+        return res.json(json);
+      });
+//    } else if (source === "linkedin") {
+//      user.importLinkedInContacts(function(json) {
+//        return res.json(json);
+//      });
     } else {
       console.log("Source is not valid. Something wrong");
       next();

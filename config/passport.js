@@ -398,30 +398,42 @@ passport.use("twitter-connect", new TwitterStrategy({
     callbackURL: HOST_SERVER_URL + "/connect/twitter/callback",
     passReqToCallback: true
   },
-  function (req, accessToken, refreshToken, profile, done) {
+  function (req, accessToken, tokenSecret, profile, done) {
 
     console.log("profile", profile);
     //TODO: change the expiration date
-
-    console.log("twitter-connect - ", req);
     console.log("req.user - ", req.user);
 
     var query = new Parse.Query("Account");
     query.equalTo("user", req.user);
     query.equalTo("provider", "twitter");
-    query.equalTo("externalId", profile._json.id);
+    query.equalTo("externalId", profile._json.id_str);
     query.find({
       success: function (accounts) {
         if (accounts.length === 0) {
           console.log("No social account linkage found ");
+          console.log(profile._json.id_str);
+          console.log("accessToken", accessToken);
+          console.log("tokenSecret", tokenSecret);
           // Create social account linkage
+
           var Account = Parse.Object.extend("Account");
           var account = new Account();
           account.set("provider", "twitter");
-          account.set("externalId", profile._json.id);
+          account.set("externalId", profile._json.id_str);
           account.set("accessToken", accessToken);
+          account.set("refreshTokenOrTokenSecret", tokenSecret);
           account.set("user", req.user);
-          account.save();
+          account.save({
+            success: function (account) {
+              console.log("Social account linkage saved", account);
+              return(null, req.user);
+            },
+            error: function (error) {
+              console.log("Social account linkage save error", error);
+              return(null, req.user);
+            }
+          });
           return done(null, req.user);
         }
         else {

@@ -79,6 +79,11 @@ module.exports.routes = {
     action: 'invitation'
   },
 
+  'get /web' : {
+    controller: 'user',
+    action: 'web'
+  },
+
 
   'get /call' : {
     controller: 'user',

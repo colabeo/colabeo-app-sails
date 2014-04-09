@@ -228,6 +228,10 @@ module.exports = {
     //return res.view();
   },
 
+  web : function(req, res, next) {
+    return res.view('home/web');
+  },
+
 
   call : function(req, res, next) {
     return res.view('home/famous_time');

@@ -228,6 +228,9 @@ module.exports = {
     //return res.view();
   },
 
+  getstarted : function(req, res, next) {
+    return res.view('home/getstarted');
+  },
 
   call : function(req, res, next) {
     return res.view('home/famous_time');

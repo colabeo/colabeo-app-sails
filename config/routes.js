@@ -79,6 +79,11 @@ module.exports.routes = {
     action: 'invitation'
   },
 
+  'get /getstarted' : {
+    controller: 'user',
+    action: 'getstarted'
+  },
+
 
   'get /call' : {
     controller: 'user',

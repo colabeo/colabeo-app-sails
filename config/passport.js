@@ -45,7 +45,7 @@ passport.use(new LocalStrategy({
                 if (user.get("emailVerified"))
                     return done(null, user);
                 else {
-                    var message = "email is not verified.";
+                    var message = sails.verifyEmailText;
                     return done(null, false, message);
                 }
             },

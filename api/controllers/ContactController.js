@@ -413,6 +413,91 @@ module.exports = {
       });
     };
 
+    user.importGitHubContacts = function(done) {
+      console.log("importGitHubContacts()");
+
+      var self = this;
+
+      var query = new Parse.Query("Account");
+      query.equalTo("provider", "github");
+      query.equalTo("user", this);
+      query.find({
+        success: function(accounts) {
+
+          if (accounts.length === 0) {
+            return res.json({"code":401,"message":"Not authorized"}, 401);
+          }
+
+          console.log("Social account linkage found");
+
+          // retrieve accessToken from user
+          var accessToken = accounts[0].get("accessToken");
+          var apiPath = "/user/following";
+
+          console.log(accessToken);
+
+          var options = {
+            host: 'api.github.com',
+            port: 443,
+//            path: apiPath + '?key=AIzaSyAqPnCk3pwWgHCZS2FrgZFFGvdWBRU7er4', //apiPath example: '/me/friends'
+            path: apiPath + '?access_token=' + accessToken,
+            method: 'GET',
+            headers: {'User-Agent':  'beepe.me'}
+          };
+
+          var buffer = ''; //this buffer will be populated with the chunks of the data received from facebook
+          var request = https.get(options, function(result){
+//            console.log('HEADERS: ' + JSON.stringify(result.headers));
+            result.setEncoding('utf8');
+            result.on('data', function(chunk){
+              console.log('chunk - ', chunk);
+              buffer += chunk;
+            });
+
+            result.on('end', function(){
+
+              var result = JSON.parse(buffer);
+
+              if (result.error) {
+                done(result);
+              }
+
+              var friendList = result;
+
+              console.log("friendList ", friendList);
+
+              var contacts = [];
+              if (friendList) {
+                for (var i = 0; i < friendList.length; i++) {
+                  if (friendList[i].type === "User") {
+                    var tmp = {
+                      provider: "github",
+                      id: friendList[i].id,
+                      name: friendList[i].login,
+                      avatar: friendList[i].avatar_url
+                    };
+                    contacts.push(tmp);
+                  }
+                }
+              }
+              done(contacts);
+            });
+          });
+
+          request.on('error', function(e){
+            console.log('error from getData: ' + e.message)
+          });
+
+          request.end();
+        },
+        error: function(error) {
+          return res.json({
+            status: 401
+          }, 401);
+        }
+      });
+    };
+
     user.initFirebaseRef(user.id, serverRootRef);
 
     if (source === "facebook") {
@@ -426,6 +511,10 @@ module.exports = {
       });
     } else if (source === "twitter") {
       user.importTwitterContacts(function(json) {
+        return res.json(json);
+      });
+    } else if (source === "github") {
+      user.importGitHubContacts(function(json) {
         return res.json(json);
       });
 //    } else if (source === "linkedin") {

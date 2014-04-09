@@ -18,6 +18,9 @@ sails.PARSE_APP_ID = "qX7XUc4JLzh6Y3rvKYuLeELLKqHk3KAXQ4xgCoue";
 sails.PARSE_JAVASCRIPT_KEY = "PhF8gvGcaWNBwWX24K7LG7wEEjIe0cVaTCtjtaXb";
 sails.PARSE_MASTER_KEY = "a9M6qBsVNJU1Zap2eumLVKV09fB94aY9K4ZXdHe1";
 
+sails.TWITTER_OAUTH_CLIENT_ID = 'GQd2saqTN80wbXKpjjAfcL6P8';
+sails.TWITTER_OAUTH_CLIENT_SECRET = 'bk4vAvghHW4Z8LUMVkZBXpm5VEbKUxDQ3Pr0g5LF4kH2Bfd1to';
+
 if (DEVELOPMENT)  {
     console.log("************** Development *****************");
     // Facebook App Credentials
@@ -43,9 +46,6 @@ if (DEVELOPMENT)  {
 
     sails.GITHUB_CONNECT_CLIENT_ID = 'a692bb0475f59eaf95c1';
     sails.GITHUB_CONNECT_CLIENT_SECRET = 'fa47117620f8ec110504bbb0f219ee2b8980b22a';
-
-    sails.TWITTER_OAUTH_CLIENT_ID = 'Hv7SUemRQ3vrIwZJ7Df66A';
-    sails.TWITTER_OAUTH_CLIENT_SECRET = 'FXj77nFhLydfiHoV2dem90kEnAz2T2yDT9BE70bNl88';
 
 } else {
     console.log("************** Production *****************");
@@ -73,8 +73,6 @@ if (DEVELOPMENT)  {
     sails.GITHUB_CONNECT_CLIENT_ID = '24c9189de792ff083814';
     sails.GITHUB_CONNECT_CLIENT_SECRET = '5c0ec92f7cbbdf3fac78d68cb6aef51b8803ce24';
 
-    sails.TWITTER_OAUTH_CLIENT_ID = 'Hv7SUemRQ3vrIwZJ7Df66A';
-    sails.TWITTER_OAUTH_CLIENT_SECRET = 'FXj77nFhLydfiHoV2dem90kEnAz2T2yDT9BE70bNl88';
 }
 
 

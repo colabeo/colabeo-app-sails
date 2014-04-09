@@ -315,33 +315,6 @@ passport.use("google-connect", new GoogleStrategy({
 var GITHUB_CONNECT_CLIENT_ID = sails.GITHUB_CONNECT_CLIENT_ID;
 var GITHUB_CONNECT_CLIENT_SECRET = sails.GITHUB_CONNECT_CLIENT_SECRET;
 
-passport.use(new GitHubStrategy({
-    clientID: GITHUB_CONNECT_CLIENT_ID,
-    clientSecret: GITHUB_CONNECT_CLIENT_SECRET,
-    callbackURL: HOST_SERVER_URL + "/auth/github/callback",
-    passReqToCallback: true
-  },
-  function (req, accessToken, refreshToken, profile, done) {
-    console.log('@GitHubStrategy - After login, AccessToken=' + accessToken);
-    console.log('@GitHubStrategy - After login, refreshToken=' + refreshToken);
-    console.log('provider - ', profile);
-    console.log('provider (raw) - ', profile._raw);
-
-    var user = new Parse.User();
-    //TODO: use generated GUID (or we should use crypt username - in order to login) as the password
-    var password = "abcd1234";
-    //var username = profile.provider + ":" + profile._json.id;
-    var username = profile._json.email;
-    user.set("lastname", profile._json.family_name);
-    user.set("firstname", profile._json.given_name);
-    user.set("username", username);
-    user.set("email", profile._json.email);
-    user.set("password", password);
-
-    socialAccountAuthenticationHandler(req, user, accessToken, "github", profile._json.id, done);
-
-  }))
-
 passport.use("github-connect", new GitHubStrategy({
     clientID: GITHUB_CONNECT_CLIENT_ID,
     clientSecret: GITHUB_CONNECT_CLIENT_SECRET,
@@ -358,8 +331,8 @@ passport.use("github-connect", new GitHubStrategy({
 
     var query = new Parse.Query("Account");
     query.equalTo("user", req.user);
-    query.equalTo("provider", "google");
-    query.equalTo("externalId", profile._json.id);
+    query.equalTo("provider", "github");
+    query.equalTo("externalId", profile._json.id.toString());
     query.find({
       success: function (accounts) {
         if (accounts.length === 0) {
@@ -368,7 +341,7 @@ passport.use("github-connect", new GitHubStrategy({
           var Account = Parse.Object.extend("Account");
           var account = new Account();
           account.set("provider", "github");
-          account.set("externalId", profile._json.id);
+          account.set("externalId", profile._json.id.toString());
           account.set("accessToken", accessToken);
           account.set("user", req.user);
           account.save();

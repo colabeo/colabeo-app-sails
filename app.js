@@ -18,6 +18,9 @@ sails.PARSE_APP_ID = "qX7XUc4JLzh6Y3rvKYuLeELLKqHk3KAXQ4xgCoue";
 sails.PARSE_JAVASCRIPT_KEY = "PhF8gvGcaWNBwWX24K7LG7wEEjIe0cVaTCtjtaXb";
 sails.PARSE_MASTER_KEY = "a9M6qBsVNJU1Zap2eumLVKV09fB94aY9K4ZXdHe1";
 
+sails.verifyEmailText = "Don't forget to verify your email. A message has been sent.";
+sails.loginErrorText = "Wrong email or password. Try again!";
+
 if (DEVELOPMENT)  {
     console.log("************** Development *****************");
     // Facebook App Credentials

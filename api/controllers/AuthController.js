@@ -38,6 +38,7 @@ module.exports = {
     user.signUp(null, {
       success: function(user) {
         console.log("Sign up - success");
+        req.flash('error', sails.verifyEmailText);
         res.redirect('/');
       },
       error: function(user, error) {
@@ -77,8 +78,7 @@ module.exports = {
 ////      console.log("next ", next);
 //        console.log("err ", err);
 //        console.log("info ", info);
-
-        req.flash('error', info);
+        req.flash('error', info=='invalid login parameters' ? sails.loginErrorText : info);
 
         if (err) { return next(err); }
         if (!user) { return res.redirect('/login'); }

@@ -49,8 +49,8 @@ if (DEVELOPMENT)  {
 
 } else {
     console.log("************** Production *****************");
-    sails.FACEBOOK_APP_ID = '686271008083898';
-    sails.FACEBOOK_APP_SECRET = '6cbe30c8c9655e28f3a148876a819565';
+    sails.FACEBOOK_APP_ID = '648143008577417';
+    sails.FACEBOOK_APP_SECRET = 'a27ff3173af0394f038c609a65c09a93';
     sails.HOST_SERVER_URL = 'https://beepe.me';
 
     // Firebase App Credentials

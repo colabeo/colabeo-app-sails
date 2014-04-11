@@ -19,16 +19,15 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script src="linker/js/welcome.js"></script>
 
-    <!-- start: Zopim Code for Chat -->
     <script type="text/javascript">
+        // Zopim
         window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=
                 d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set.
                 _.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute('charset','utf-8');
             $.src='//v2.zopim.com/?1qqvmve72sJsD78pCRHkIkd0gGD93w4D';z.t=+new Date;$.
                     type='text/javascript';e.parentNode.insertBefore($,e)})(document,'script');
-    </script>
-    <!-- end: Zopim Code for Chat-->
-    <script>
+
+        // Google Analytics
         (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
             (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
                 m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -37,9 +36,62 @@
         ga('create', 'UA-46143891-2', 'beepe.me');
         ga('send', 'pageview');
 
+        // Social
+        setTimeout(function(){
+            createSocial();
+        },2000);
+        function createSocial() {
+            $('.social').css('opacity',1);
+            (function(d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (d.getElementById(id))
+                    return;
+                js = d.createElement(s);
+                js.id = id;
+                js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=229610010412672";
+                fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+
+            (function() {
+                var po = document.createElement('script');
+                po.type = 'text/javascript';
+                po.async = true;
+                po.src = 'https://apis.google.com/js/plusone.js';
+                var s = document.getElementsByTagName('script')[0];
+                s.parentNode.insertBefore(po, s);
+            })();
+
+            !function(d, s, id) {
+                var js, fjs = d.getElementsByTagName(s)[0];
+                if (!d.getElementById(id)) {
+                    js = d.createElement(s);
+                    js.id = id;
+                    js.src = "//platform.twitter.com/widgets.js";
+                    fjs.parentNode.insertBefore(js, fjs);
+                }
+            }(document, "script", "twitter-wjs");
+
+            setTimeout(function() {
+                if (!window.FB) {
+                    $('.fb-like').hide();
+                }
+                if (!window.gapi) {
+                    $('.g-plusone').hide();
+                }
+                if (!window.twttr) {
+                    $('.twitter-share-button').hide();
+                }
+            }, 3000);
+            $('body').on('click', '.appLink', function() {
+                var url = $(this).attr('href');
+                window.open(url, '_blank');
+                window.focus();
+            });
+        }
     </script>
 </head>
 <body>
+    <div id="fb-root"></div>
     <div class="background"></div>
     <div class="container">
         <!-- Page heading -->
@@ -59,6 +111,15 @@
         <iframe class="iframe-colabeo-dashboard"></iframe>
 
         <div class="footer">© 2014 Colabeo Inc.</div>
+        <div class="social popoverLove">
+            <div class="fb-like" data-href="https://chrome.google.com/webstore/detail/beepe-phone/hcfncmkiaffeiicmpkaajdibigffgnfc" data-send="false" data-layout="button_count" data-width="450" data-show-faces="true"></div>
+
+            <a href="https://twitter.com/share" class="twitter-share-button" data-url="https://chrome.google.com/webstore/detail/beepe-phone/hcfncmkiaffeiicmpkaajdibigffgnfc" data-text="Check out this app" data-via="de_mobo">Tweet</a>
+
+            <div class="g-plusone" data-size="medium" data-href="https://chrome.google.com/webstore/detail/beepe-phone/hcfncmkiaffeiicmpkaajdibigffgnfc"></div>
+
+            <div class="review"><div class="appLink" href="https://chrome.google.com/webstore/detail/beepe-phone/hcfncmkiaffeiicmpkaajdibigffgnfc/reviews" target="_blank">Like this app? Rate it 5 stars.</div></div>
+        </div>
     </div>
 </body>
 </html>

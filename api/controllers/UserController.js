@@ -99,6 +99,7 @@ var emailChatRoom = function(chatroom, caller, callee, emailflag, debug) {
 var sendInvite = function(to, from, caller, callee, chatroom, debug) {
 
     console.log("Invited Chatroom e-mail sent for emailflag set to 1");
+    from = "no-reply@beepe.me";
     var subject = caller.firstname + " has invited you to a Beepe Chatroom";
     var text = ["Hi " , callee.firstname, ",\n\n",
                 caller.firstname, " has just invited you to Beepe\n\n",
@@ -113,6 +114,7 @@ var sendInvite = function(to, from, caller, callee, chatroom, debug) {
 
 var sendMissedCall = function(to, from, caller, callee, chatroom, debug) {
     console.log("Missed Call e-mail sent for emailflag set to 2");
+    from = "no-reply@beepe.me";
     var subject = caller.firstname + " has just called you on Beepe";
     var text = [ "Hi ", callee.firstname , ",\n\n",
                 caller.firstname, " has just called you on Beepe\n\n",

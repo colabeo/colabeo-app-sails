@@ -101,7 +101,7 @@ var sendInvite = function(to, from, caller, callee, chatroom, debug) {
     console.log("Invited Chatroom e-mail sent for emailflag set to 1");
     var subject = caller.firstname + " has invited you to a Beepe Chatroom";
     var text = ["Hi " , callee.firstname, ",\n\n",
-                caller.firstname, " has just called you on Beepe\n\n",
+                caller.firstname, " has just invited you to Beepe\n\n",
                 "Open this link with your Chrome browser to start chatting:\n\n",
                 "https://beepe.me/welcome?r="+chatroom].join("");
     if ( debug ) {

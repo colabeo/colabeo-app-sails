@@ -21,6 +21,9 @@ sails.PARSE_MASTER_KEY = "a9M6qBsVNJU1Zap2eumLVKV09fB94aY9K4ZXdHe1";
 sails.TWITTER_OAUTH_CLIENT_ID = 'GQd2saqTN80wbXKpjjAfcL6P8';
 sails.TWITTER_OAUTH_CLIENT_SECRET = 'bk4vAvghHW4Z8LUMVkZBXpm5VEbKUxDQ3Pr0g5LF4kH2Bfd1to';
 
+sails.LINKEDIN_OAUTH_CLIENT_ID = '75iszqab0ero2u';
+sails.LINKEDIN_OAUTH_CLIENT_SECRET = 'EuG8oSzfy0BNtO8r';
+
 sails.verifyEmailText = "Don't forget to verify your email. A message has been sent.";
 sails.loginErrorText = "Wrong email or password. Try again!";
 

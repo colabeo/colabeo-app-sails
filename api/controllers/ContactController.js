@@ -498,6 +498,91 @@ module.exports = {
       });
     };
 
+    user.importLinkedInContacts = function(done) {
+      console.log("importLinkedInContacts()");
+
+      var self = this;
+
+      var query = new Parse.Query("Account");
+      query.equalTo("provider", "linkedin");
+      query.equalTo("user", this);
+      query.find({
+        success: function(accounts) {
+
+          if (accounts.length === 0) {
+            return res.json({"code":401,"message":"Not authorized"}, 401);
+          }
+
+          console.log("Social account linkage found");
+
+          // retrieve accessToken from user
+          var accessToken = accounts[0].get("accessToken");
+          var apiPath = "/v1/people/~/connections:(id,formatted-name,headline,picture-url)";
+
+          console.log(accessToken);
+
+          var options = {
+            host: 'api.linkedin.com',
+            port: 443,
+//            path: apiPath + '?key=AIzaSyAqPnCk3pwWgHCZS2FrgZFFGvdWBRU7er4', //apiPath example: '/me/friends'
+            path: apiPath + '?format=json&oauth2_access_token=' + accessToken,
+            method: 'GET',
+            headers: {'User-Agent':  'beepe.me'}
+          };
+
+          var buffer = ''; //this buffer will be populated with the chunks of the data received from facebook
+          var request = https.get(options, function(result){
+//            console.log('HEADERS: ' + JSON.stringify(result.headers));
+            result.setEncoding('utf8');
+            result.on('data', function(chunk){
+              console.log('chunk - ', chunk);
+              buffer += chunk;
+            });
+
+            result.on('end', function(){
+
+              var result = JSON.parse(buffer);
+
+              if (result.error) {
+                done(result);
+              }
+
+              var friendList = result.values;
+
+              console.log("friendList ", friendList);
+
+              var contacts = [];
+              if (friendList) {
+                for (var i = 0; i < friendList.length; i++) {
+                  console.log(friendList[i]);
+                  var tmp = {
+                    provider: "linkedin",
+                    id: friendList[i].id,
+                    name: friendList[i].formattedName,
+                    avatar: friendList[i].pictureUrl
+                  };
+                  contacts.push(tmp);
+                }
+              }
+              console.log('contacts', contacts);
+              done(contacts);
+            });
+          });
+
+          request.on('error', function(e){
+            console.log('error from getData: ' + e.message)
+          });
+
+          request.end();
+        },
+        error: function(error) {
+          return res.json({
+            status: 401
+          }, 401);
+        }
+      });
+    };
+
     user.initFirebaseRef(user.id, serverRootRef);
 
     if (source === "facebook") {
@@ -515,6 +600,10 @@ module.exports = {
       });
     } else if (source === "github") {
       user.importGitHubContacts(function(json) {
+        return res.json(json);
+      });
+    } else if (source === "linkedin") {
+      user.importLinkedInContacts(function(json) {
         return res.json(json);
       });
 //    } else if (source === "linkedin") {

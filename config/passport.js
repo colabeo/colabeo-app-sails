@@ -6,7 +6,7 @@ var passport = require('passport'),
     GoogleStrategy = require('passport-google-oauth').OAuth2Strategy,
     GitHubStrategy = require('passport-github').Strategy,
     TwitterStrategy = require('passport-twitter').Strategy,
-    LinkedInStrategy = require('passport-linkedin').Strategy,
+    LinkedInStrategy = require('passport-linkedin-oauth2').Strategy,
     Parse = require('parse').Parse,
     bcrypt = require('bcrypt'),
     flash = require('connect-flash');
@@ -429,12 +429,86 @@ passport.use("twitter-connect", new TwitterStrategy({
 ));
 
 passport.use("linkedin-connect", new LinkedInStrategy({
-    consumerKey: '75iszqab0ero2u',
-    consumerSecret: 'EuG8oSzfy0BNtO8r',
-    callbackURL: HOST_SERVER_URL + "/connect/linkedin/callback",
-//    scope: ['r_emailaddress', 'r_basicprofile'],
+    clientID:     '752pn0inx89p1l',
+    clientSecret: 'AJu3dlUwErZuUU4z',
+    callbackURL:  HOST_SERVER_URL + "/connect/linkedin/callback",
+    scope:        [ 'r_basicprofile', 'r_emailaddress', 'r_network'],
+    passReqToCallback: true
+  },
+  function(req, accessToken, refreshToken, profile, done) {
+    // asynchronous verification, for effect...
+    req.session.accessToken = accessToken;
+    process.nextTick(function () {
+      console.log("profile", profile);
+      //TODO: change the expiration date
+      console.log("req.user - ", req.user);
+
+      var query = new Parse.Query("Account");
+      query.equalTo("user", req.user);
+      query.equalTo("provider", "linkedin");
+      query.equalTo("externalId", profile._json.id);
+      query.find({
+        success: function (accounts) {
+          if (accounts.length === 0) {
+            console.log("No social account linkage found ");
+            console.log(profile._json.id_str);
+            console.log("accessToken", accessToken);
+            // Create social account linkage
+
+            var Account = Parse.Object.extend("Account");
+            var account = new Account();
+            account.set("provider", "linkedin");
+            account.set("externalId", profile._json.id);
+            account.set("accessToken", accessToken);
+            account.set("refreshTokenOrTokenSecret", refreshToken);
+            account.set("user", req.user);
+            account.save({
+              success: function (account) {
+                console.log("Social account linkage saved", account);
+                return(null, req.user);
+              },
+              error: function (error) {
+                console.log("Social account linkage save error", error);
+                return(null, req.user);
+              }
+            });
+            return done(null, req.user);
+          }
+          else {
+            console.log("Social account linkage found");
+            // Update the accessToken
+            var account = accounts[0];
+            account.set("accessToken", accessToken);
+            account.save();
+            return done(null, req.user);
+          }
+        },
+        error: function (error) {
+          console.log("Find account error?", error);
+          return done(null, req.user);
+        }
+      });
+    });
+  }
+));
+
+passport.use(new LinkedInStrategy({
+    clientID:     '75iszqab0ero2u',
+    clientSecret: 'EuG8oSzfy0BNtO8r',
+    callbackURL:  HOST_SERVER_URL + "/connect/linkedin/callback",
+    scope:        [ 'r_basicprofile', 'r_emailaddress'],
     passReqToCallback: true
   }, function(req, accessToken, refreshToken, profile, done) {
+
+    process.nextTick(function () {
+      console.log("in process", profile);
+      // To keep the example simple, the user's Google profile is returned to
+      // represent the logged-in user.  In a typical application, you would want
+      // to associate the Google account with a user record in your database,
+      // and return that user instead.
+      return done(null, profile);
+    });
+
     console.log("profile", profile);
     //TODO: change the expiration date
 

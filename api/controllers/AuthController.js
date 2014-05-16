@@ -106,7 +106,7 @@ module.exports = {
       passport.authenticate(provider, { failureRedirect: '/login' , scope : decodeURIComponent(scope) })(req, res, next);
     } else {
       console.log("loginWith no scope");
-      passport.authenticate(provider, { failureRedirect: '/login' })(req, res, next);
+      passport.authenticate(provider, { state : '', failureRedirect: '/login' })(req, res, next);
     }
   },
 
@@ -158,12 +158,17 @@ module.exports = {
     var provider = req.param("provider");
     console.log("connectWith", provider);
 
-    var scope = req.param("scope");
-    if (scope) {
-      console.log(decodeURIComponent(scope));
-      passport.authorize(provider + '-connect', { failureRedirect: '/' , scope : decodeURIComponent(scope) })(req, res, next);
+    if (provider === "linkedin") {
+      passport.authorize('linkedin-connect', { state : 'SOME STATE' })(req, res, next);
     } else {
-      passport.authorize(provider + '-connect', { failureRedirect: '/' })(req, res, next);
+      var scope = req.param("scope");
+      if (scope) {
+        console.log(decodeURIComponent(scope));
+        passport.authorize(provider + '-connect', { failureRedirect: '/' , scope : decodeURIComponent(scope) })(req, res, next);
+      } else {
+        console.log("connectWith", provider);
+        passport.authorize(provider + '-connect', { failureRedirect: '/' })(req, res, next);
+      }
     }
   },
 
